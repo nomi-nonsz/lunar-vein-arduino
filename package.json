@@ -1,0 +1,27 @@
+{
+  "name": "lunar-vein-arduino",
+  "version": "1.0.0",
+  "description": "A test to arduino",
+  "main": "index.ts",
+  "author": "Norman Andrians",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "nodemon",
+    "test-blink": "nodemon test/blink.js"
+  },
+  "dependencies": {
+    "@serialport/bindings": "^9.2.9",
+    "express": "^4.18.3",
+    "firmata": "^2.3.0",
+    "nodemon": "^3.1.0",
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/firmata": "^0.19.8",
+    "@types/nodemon": "^1.19.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
