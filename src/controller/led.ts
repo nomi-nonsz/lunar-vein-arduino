@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { board } from "../setup";
 
+export interface ColorChannel {
+    r: string,
+    g: string,
+    b: string
+}
+
 export async function readLed (req: Request, res: Response) {
     const { p } = req.params;
     const pin = Number.parseInt(p);
@@ -36,14 +42,14 @@ export async function writeLed (req: Request, res: Response) {
         switch (act) {
             case 'on':
                 board.digitalWrite(pin, board.HIGH);
-                console.log(`${req.hostname} | ${pin} | ${act.toLocaleUpperCase()}`);
+                console.log(`${req.hostname} | ${pin} | LED: ${act.toLocaleUpperCase()}`);
                 break;
             case 'off':
                 board.digitalWrite(pin, board.LOW);
-                console.log(`${req.hostname} | ${pin} | ${act.toLocaleUpperCase()}`);
+                console.log(`${req.hostname} | ${pin} | LED: ${act.toLocaleUpperCase()}`);
                 break;
             default:
-                console.log(`${req.hostname} | ${pin} | INVALID ACT`);
+                console.log(`${req.hostname} | ${pin} | LED: INVALID ACT`);
         }
 
         res.status(200).json({
