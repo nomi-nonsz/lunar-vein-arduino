@@ -1,11 +1,11 @@
 
 export type digitalValue = 'ON' | 'OFF';
-export type voltage = 'HIGH' | 'LOW';
-export type sPinModes = 'INPUT' | 'OUTPUT' | 'ANALOG' | 'PWM' | 'SERVO' |'SHIFT' |'I2C' |'ONEWIRE' |'STEPPER' |'SERIAL' |'PULLUP' |'IGNORE' |'PING_READ' | 'UNKOWN';
+export type voltage = 'HIGH' | 'LOW' | 'high' | 'low' | 1 | 0;
+export type sPinModes = 'INPUT' | 'OUTPUT' | 'ANALOG' | 'PWM' | 'SERVO';
 
 export interface ChannelPins {
     pin: number,
-    value: digitalValue
+    value: boolean
 }
 
 export interface ColorChannel {

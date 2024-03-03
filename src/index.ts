@@ -32,4 +32,8 @@ app.listen(port, host, () => {
         console.log(chalk.green(`Board at port ${comport} Connected!! ＼⁠(⁠^⁠o⁠^⁠)⁠／`));
         suBoard.connected = true;
     })
+
+    board.on('exit', () => {
+        console.log("Bye bye");
+    })
 });

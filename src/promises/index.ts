@@ -1,6 +1,6 @@
-import Board, { PIN_MODE } from "firmata";
+import { Board } from "johnny-five";
 
-export function digitalRead (board: Board, pin: number): Promise<PIN_MODE | number> {
+export function digitalRead (board: Board, pin: number): Promise<number> {
     return new Promise((resolve, reject) => {
         board.digitalRead(pin, (val) => {
             resolve(val);

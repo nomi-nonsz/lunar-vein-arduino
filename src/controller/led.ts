@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { board } from "../setup";
 import { ChannelPins, digitalValue, voltage } from ".";
-import { digitalRead } from "../promises";
+import { analogRead, digitalRead } from "../promises";
+import { Led } from "johnny-five";
 
 
 export async function readLed (req: Request, res: Response) {
@@ -44,12 +45,12 @@ export async function writeLed (req: Request, res: Response) {
         switch (act) {
             case 'on':
                 state = 'ON';
-                volt = 'HIGH';
+                volt = 1;
                 console.log(`${req.hostname} | ${pin} | LED: ${state}`);
                 break;
             case 'off':
                 state = 'OFF';
-                volt = 'LOW';
+                volt = 0;
                 console.log(`${req.hostname} | ${pin} | LED: ${state}`);
                 break;
             default:
@@ -60,7 +61,7 @@ export async function writeLed (req: Request, res: Response) {
                 });
         }
 
-        board.digitalWrite(pin, board[volt]);
+        board.digitalWrite(pin, volt);
 
         res.status(200).json({
             status: 200,
@@ -79,43 +80,51 @@ export async function writeLed (req: Request, res: Response) {
 
 export async function readRgbLed (req: Request, res: Response) {
     const r: number = Number.parseInt(req.body.r);
-    const g: number = Number.parseInt(req.body.b);
+    const g: number = Number.parseInt(req.body.g);
     const b: number = Number.parseInt(req.body.b);
 
     const rgbPins: number[] = Object.values({ r, g, b });
-    const pinStates: number[] = [];
 
     for (let i = 0; i < rgbPins.length; i++) {
         const pin = rgbPins[i];
-        
         if (Number.isNaN(pin)) {
             return res.status(400).json({
                 status: 400,
                 message: `Invalid pin ${pin} param, it should be integer`
             });
         }
-    
-        const state: number = await digitalRead(board, pin);
-        pinStates.push(state);
     }
+
+    const led = new Led.RGB({
+        pins: {
+            red: r,
+            green: g,
+            blue: b
+        },
+        isAnode: true
+    })
+
+    led.red = new Led(r);
+    led.green = new Led(g);
+    led.blue = new Led(b);
 
     return res.status(200).json({
         status: 200,
         pin_state: {
-            [r]: pinStates[0],
-            [g]: pinStates[1],
-            [b]: pinStates[2]
+            [r]: led.red.isOn,
+            [g]: led.green.isOn,
+            [b]: led.blue.isOn
         }
     });
 }
 
 export async function writeRgbLed (req: Request, res: Response) {
     const r: ChannelPins = req.body.r;
-    const g: ChannelPins = req.body.b;
+    const g: ChannelPins = req.body.g;
     const b: ChannelPins = req.body.b;
 
     const rgbLeds: ChannelPins[] = Object.values({ r, g, b });
-
+    
     try {
         rgbLeds.forEach((led, i) => {
             if (Number.isNaN(led.pin)) {
@@ -124,23 +133,27 @@ export async function writeRgbLed (req: Request, res: Response) {
                     message: `Invalid pin ${led.pin} param, it should be integer`
                 });
             }
-        
-            switch (led.value) {
-                case 'ON':
-                    board.analogWrite(led.pin, board.HIGH);
-                    console.log(`${req.hostname} | ${led.pin} | LED: ${led.value}`);
-                    break;
-                case 'OFF':
-                    board.analogWrite(led.pin, board.LOW);
-                    console.log(`${req.hostname} | ${led.pin} | LED: ${led.value}`);
-                    break;
-                default:
-                    console.log(`${req.hostname} | ${led.pin} | LED: INVALID VALUE`);
-            }
         })
 
-        const pins: string[] = rgbLeds.map(c => `${c.pin}, `);
-        const values: string[] = rgbLeds.map(c => `${c.value}, `);
+        const led = new Led.RGB({
+            pins: {
+                red: r.pin,
+                green: g.pin,
+                blue: b.pin
+            },
+            isAnode: true
+        })
+
+        led.red = new Led(r.pin);
+        led.green = new Led(g.pin);
+        led.blue = new Led(b.pin);
+
+        if (r.value == true) led.red.on(); else led.red.off();
+        if (g.value == true) led.green.on(); else led.green.off();
+        if (b.value == true) led.blue.on(); else led.blue.off();
+
+        const pins: string = rgbLeds.map(c => c.pin.toString()).join(", ");
+        const values: string = rgbLeds.map(c => `${c.value}`).join(", ");
 
         res.status(200).json({
             status: 200,
