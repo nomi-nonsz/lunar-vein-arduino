@@ -1,4 +1,5 @@
 export interface SupportBoard {
+    port: string | null,
     connected: boolean,
     PINS: {
         pwm: number[],
@@ -8,6 +9,7 @@ export interface SupportBoard {
 }
 
 export class SuBoard implements SupportBoard {
+    public port = null;
     public connected = false;
     public PINS = {
         pwm: [],
