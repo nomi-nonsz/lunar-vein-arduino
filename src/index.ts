@@ -5,6 +5,7 @@ import chalk from 'chalk';
 
 import { board, suBoard, comport } from './setup';
 
+import { isBoardConnected } from './middleware/connection';
 import view from './routes/view';
 import api from './routes/api';
 
@@ -19,10 +20,11 @@ app.use(express.json());
 app.use(express.static('client'));
 
 app.use('/', view);
-app.use('/api-arduino', api);
+app.use('/api-arduino', isBoardConnected, api);
 
 app.listen(port, host, () => {
-    console.log(`Server is running in ${host} at port ${port} 🗣️🗣️🗣️`);
+    console.log(`Server is connected and running in ${host} at port ${port} 🗣️🗣️🗣️`);
+    console.log(`Press CTRL+C to exit`);
     console.log(`URL: http://${host}:${port}/\n`);
     console.log(chalk.yellow(`Connecting to Board`));
 
