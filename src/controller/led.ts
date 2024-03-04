@@ -1,20 +1,12 @@
 import { Request, Response } from "express";
 import { board } from "../setup";
 import { ChannelPins, digitalValue, voltage } from ".";
-import { analogRead, digitalRead } from "../promises";
 import { Led } from "johnny-five";
 
 
 export async function readLed (req: Request, res: Response) {
     const { p } = req.params;
     const pin: number = Number.parseInt(p);
-
-    if (Number.isNaN(pin)) {
-        return res.status(400).json({
-            status: 400,
-            message: 'Invalid pin param, it should be integer'
-        });
-    }
 
     const pinState: digitalValue = board.pins[pin].value == 1 ? 'ON' : 'OFF';
 
@@ -35,13 +27,6 @@ export async function writeLed (req: Request, res: Response) {
     let volt: voltage;
 
     try {
-        if (Number.isNaN(pin)) {
-            return res.status(400).json({
-                status: 400,
-                message: 'Invalid pin param, it should be integer'
-            });
-        }
-    
         switch (act) {
             case 'on':
                 state = 'ON';
@@ -126,7 +111,7 @@ export async function writeRgbLed (req: Request, res: Response) {
     const rgbLeds: ChannelPins[] = Object.values({ r, g, b });
     
     try {
-        rgbLeds.forEach((led, i) => {
+        rgbLeds.forEach(led => {
             if (Number.isNaN(led.pin)) {
                 return res.status(400).json({
                     status: 400,

@@ -9,6 +9,7 @@ import { isBoardConnected } from './middleware/connection';
 import view from './routes/view';
 import api from './routes/api';
 import { selectPort } from './ports';
+import socketHandler from './handlers/socketHandler';
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +20,8 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.static('client'));
+
+io.on('connection', socketHandler);
 
 app.use('/', view);
 app.use('/api-arduino', isBoardConnected, api);
