@@ -13,7 +13,11 @@ import socketHandler from './handlers/socketHandler';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server); // I have no experience at WebSocket, so.. forgive me :)
+const io = new Server(server, {
+    cors: {
+        origin: "*"
+    }
+}); // I have no experience at WebSocket, so.. forgive me :)
 
 const host = 'localhost';
 const port = 3000;
@@ -27,7 +31,7 @@ app.use('/', view);
 app.use('/api-arduino', isBoardConnected, api);
 
 console.log("\nRunning Server...");
-app.listen(port, host, () => {
+server.listen(port, () => {
     console.log(`Server is connected and running in ${host} at port ${port} 🗣️🗣️🗣️`);
     console.log(`* Press ${chalk.bold(chalk.yellow("CTRL+C"))} to exit`);
     console.log(`* URL: ${chalk.bold(`http://${host}:${port}/\n`)}`);

@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon",
+    "ports": "ts-node src/ports/print.ts",
     "test-blink": "nodemon test/blink.js"
   },
   "dependencies": {

@@ -3,10 +3,9 @@ import { Piezo } from "johnny-five";
 import { Pitch } from "../melodies";
 
 export function piezoTone (req: Request, res: Response): Response {
-    const pin: number = Number.parseInt(req.params.p);
-    const note: string = req.params.n;
+    const { pin, note }: { pin: number, note: string } = req.body;
 
-    const piezo = new Piezo(pin);
+    const piezo: Piezo = new Piezo(pin);
 
     piezo.play({
         song: note.toUpperCase(),
@@ -21,13 +20,7 @@ export function piezoTone (req: Request, res: Response): Response {
 }
 
 export function piezoNoTone (req: Request, res: Response): Response {
-    const pin: number = Number.parseInt(req.params.p);
-    if (Number.isNaN(pin)) {
-        return res.status(400).json({
-            status: 400,
-            message: 'Invalid pin param, it should be integer'
-        });
-    }
+    const { pin }: { pin: number } = req.body;
 
     new Piezo(pin).noTone();
 
@@ -41,18 +34,17 @@ interface MusicSheet {
 }
 
 export function piezoPlayNotes (req: Request, res: Response): Response {
-    const pin: number = Number.parseInt(req.params.p);
+    const { pin }: { pin: number } = req.body;
     const { notes, beats, tempo }: MusicSheet = req.body;
 
-    if (Number.isNaN(pin)) {
-        return res.status(400).json({
-            status: 400,
-            message: 'Invalid pin param, it should be integer'
-        });
-    }
-
     const piezo: Piezo = new Piezo(pin);
-    const song: [frequency: string, duration: number][] = notes.map((note): [frequency: string, duration: number] => { return [note, beats]});
+    const song: [frequency: string, duration: number][] = notes
+        .map((note, i): [frequency: string, duration: number] => {
+            const beat = notes[i+1] && notes[i+1].trim() == "-" ? beats*2 : beats;
+            return [note, beat]
+        })
+        .filter((note) => note[0].trim() != "-");
+    
     const notesS: string = notes.join(", ");
 
     piezo.play({ song, tempo });

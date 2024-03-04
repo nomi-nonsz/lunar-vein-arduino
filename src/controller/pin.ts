@@ -4,7 +4,7 @@ import { sPinModes } from ".";
 import { Pin } from "johnny-five";
 
 export function readPin (req: Request, res: Response) {
-    const pin: number = Number.parseInt(req.params.p);
+    const pin: string = req.params.p;
 
     const { mode } = board.pins[pin];
 
@@ -18,7 +18,7 @@ export function readPin (req: Request, res: Response) {
 }
 
 export function setPin (req: Request, res: Response) {
-    const pin: number = Number.parseInt(req.params.p);
+    const pin: string = req.params.p;
     const mode: sPinModes | string = req.params.m.toUpperCase();
 
     board.pinMode(pin, Pin[mode]);
