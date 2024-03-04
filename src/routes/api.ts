@@ -4,6 +4,9 @@ import { Router } from "express";
 import { readLed, readRgbLed, writeLed, writeRgbLed } from "../controller/led";
 import { readPin, setPin } from "../controller/pin";
 import { piezoNoTone, piezoPlayNotes, piezoTone } from "../controller/piezo";
+import { rotateServo } from "../controller/servo";
+import { readResistor } from "../controller/photoresistor";
+
 import { isPinNumeric } from "../middleware/pin";
 
 const router: Router = Router();
@@ -24,5 +27,10 @@ router.patch('/rgb-led/', writeRgbLed);
 router.patch('/piezo/', piezoTone);
 router.patch('/piezo/stop/', piezoNoTone);
 router.patch('/piezo/music/', piezoPlayNotes);
+
+// for real-time communication is deprecated and not recommended
+// use other protocol like websocket instead
+router.patch('/servo/:p/:m', rotateServo);
+router.get('/photoresistor/:p', readResistor);
 
 export default router;

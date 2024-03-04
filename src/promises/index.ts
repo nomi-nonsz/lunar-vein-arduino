@@ -11,7 +11,7 @@ export function digitalRead (board: Board, pin: number): Promise<number> {
     });
 }
 
-export function analogRead (board: Board, pin: number): Promise<number> {
+export function analogRead (board: Board, pin: string): Promise<number> {
     return new Promise((resolve, reject) => {
         board.analogRead(pin, (val) => {
             resolve(val);
