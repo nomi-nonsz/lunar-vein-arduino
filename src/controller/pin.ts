@@ -10,9 +10,12 @@ export function readPin (req: Request, res: Response) {
 
     return res.status(200).json({
         status: 200,
-        state: {
-            used: true
-        },
+        pins: [
+            {
+                pin: pin,
+                mode: mode
+            }
+        ],
         message: `Pin ${pin} is ${mode}`
     });
 }
@@ -28,6 +31,12 @@ export function setPin (req: Request, res: Response) {
 
     return res.status(200).json({
         status: 200,
+        pins: [
+            {
+                pin: pin,
+                mode: mode
+            }
+        ],
         message: `Pin ${pin} setted as ${mode}`
     });
 }
