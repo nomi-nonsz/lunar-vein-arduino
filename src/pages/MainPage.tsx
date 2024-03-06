@@ -1,5 +1,8 @@
 import MainBody from "../components/MainBody";
+
+// Section components
 import Hero from "../components/landing/Hero";
+import ControlLED from "../components/landing/ControlLED";
 
 import LunarImg from "../assets/img/ocs/lunar-oc.png";
 
@@ -12,6 +15,7 @@ function MainPage () {
                 img={LunarImg}
                 shortNav={ControlNav}
             />
+            <ControlLED />
         </MainBody>
     </>)
 }

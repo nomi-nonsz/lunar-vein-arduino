@@ -1,9 +1,5 @@
 [
     {
-        "name": "Serial Monitor",
-        "target": "#serial-monitor"
-    },
-    {
         "name": "LED",
         "target": "#led"
     },

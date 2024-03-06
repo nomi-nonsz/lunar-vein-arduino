@@ -11,10 +11,10 @@ interface InHero {
     shortNav: ShortNav[]
 }
 
-export default function Hero ({ img, shortNav }: InHero) {
+function Hero ({ img, shortNav }: InHero) {
     return (
         <div className="h-screen container flex items-center">
-            <div className="grid grid-cols-8 gap-4 items-center relative">
+            <div className="container-grid items-center relative">
                 <div className="col-span-4">
                     <h2 className="font-poppins text-6xl font-bold leading-normal">
                         Lunar Vein: Arduino Client
@@ -49,3 +49,5 @@ export default function Hero ({ img, shortNav }: InHero) {
         </div>
     )
 }
+
+export default Hero;
