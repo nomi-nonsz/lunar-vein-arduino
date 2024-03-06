@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Serial Monitor",
+        "target": "#serial-monitor"
+    },
+    {
+        "name": "LED",
+        "target": "#led"
+    },
+    {
+        "name": "RGB LED",
+        "target": "#rgb-led"
+    },
+    {
+        "name": "Piezo",
+        "target": "#piezo"
+    },
+    {
+        "name": "Moto Servo",
+        "target": "#moto-servo"
+    },
+    {
+        "name": "Photoresistor",
+        "target": "#photoresistor"
+    },
+    {
+        "name": "Ultrasonic sensor",
+        "target": "#ultrasonic-sensor"
+    }
+]
