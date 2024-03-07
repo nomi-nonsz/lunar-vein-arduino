@@ -24,7 +24,22 @@ const INIT_VALUES: ControllerContextProps = {
             state: false
         }
     ],
-    rgbLed: [],
+    rgbLed: [
+        {
+            red: {
+                pin: 13,
+                state: false
+            },
+            green: {
+                pin: 12,
+                state: false
+            },
+            blue: {
+                pin: 11,
+                state: false
+            }
+        }
+    ],
     piezo: [],
     motoServo: [],
     photoresistor: [],

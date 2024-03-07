@@ -1,56 +1,53 @@
-import { useState } from "react";
 import PinBox from "../forms/PinBox";
-import { PinState } from "../../types/board";
 import { useLed } from "../../hooks";
+import ControlSection from "../ControlSection";
 
 
 function ControlLED () {
-    const { addLed, getLed, leds, removeLed, setLed, setLedPin } = useLed();
+    const { addLed, leds, removeLed, setLed, setLedPin } = useLed();
 
     const handleAdd = (): void => {
         let anopin = 13;
         for (let i = 0; i < leds.length; i++) {
-            // console.log(leds[i].pin != anopin, leds[i].pin, anopin);
-            if (leds[i].pin != anopin) break;
-            anopin--;
+            if (leds.filter(led => led.pin == anopin).length > 0) {
+                anopin--;
+            }
+            else break;
         }
         addLed(anopin, false);
     }
 
     return (
-        <div className="container py-16">
-            <div className="container-grid items-center relative">
-                <div className="col-span-6">
-                    <h2 className="text-4xl font-poppins font-bold leading-normal mb-4">
-                        LED
-                    </h2>
-                    <div className="grid grid-cols-6 gap-6">
-                        {leds.map((led, i) => (
-                            <PinBox
-                                key={i}
-                                value={led.pin}
-                                state={led.state}
-                                onValueChange={(e) => {
-                                    const pin = e.target.value;
-                                    if (leds.filter(led => led.pin == pin).length > 0) {
-                                        alert(`Pin ${pin} is already use`);
-                                        return;
-                                    }
-                                    setLedPin(led.pin, pin);
-                                }}
-                                onStateChange={() => {
-                                    const state = !led.state;
-                                    setLed(led.pin, state);
-                                }}
-                            />
-                        ))}
-                        {leds.length < 14 && <PinBox.Add
-                            onClick={handleAdd}
-                        />}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ControlSection
+            title="LED"
+            id="led"
+            stack={(<>
+                {leds.map((led, i) => (
+                <PinBox
+                    className="w-36"
+                    key={i}
+                    minusBtn={true}
+                    value={led.pin}
+                    state={led.state}
+                    onValueChange={(e) => {
+                        const pin = e.target.value;
+                        setLedPin(i, pin);
+                    }}
+                    onStateChange={() => {
+                        const state = !led.state;
+                        setLed(led.pin, state);
+                    }}
+                    onDelete={() => {
+                        removeLed(i);
+                    }}
+                    />
+                ))}
+                {leds.length < 14 && <PinBox.Add
+                    className="w-36 mt-10"
+                    onClick={handleAdd}
+                />}
+            </>)}
+        />
     )
 }
 

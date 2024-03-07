@@ -5,6 +5,9 @@
 @tailwind utilities;
 
 @layer base {
+    html {
+        scroll-behavior: smooth;
+    }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -27,6 +30,14 @@
     to { opacity: 1; }
 }
 
+@keyframes wewew {
+    0% { transform: scale(1, 1); }
+    25% { transform: scale(1.1, .9); }
+    50% { transform: scale(.9, 1.1); }
+    75% { transform: scale(1.1, .9); }
+    100% { transform: scale(1, 1); }
+}
+
 .container {
     @apply w-[1280px] mx-auto;
 }
@@ -36,10 +47,10 @@
 }
 
 .switch {
-    @apply rounded-lg;
+    @apply rounded-lg transition;
 }
 .switch > .handler {
-    @apply rounded-md p-[6px] transition-all;
+    @apply rounded-md p-[6px] transition-[margin];
 }
 
 
@@ -51,7 +62,7 @@
 }
 
 .switch-off {
-    @apply border-disabled;
+    @apply border-disabled bg-transparent;
 }
 .switch-off > .handler {
     @apply bg-disabled ms-0;

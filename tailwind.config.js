@@ -23,7 +23,8 @@ export default {
       },
       animation: {
         'size-in': 'size-in .3s ease-in-out',
-        'fade-in': 'fade-in .3s ease-in-out'
+        'fade-in': 'fade-in .3s ease-in-out',
+        'wewew': 'wewew .45s ease-in-out',
       }
     },
   },

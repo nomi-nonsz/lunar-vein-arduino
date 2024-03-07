@@ -24,13 +24,17 @@ function Hero ({ img, shortNav }: InHero) {
                         <small className="text-xs"> i don't even know anything about electronics and some IoT stuff lol</small>
                     </p>
                     <div className="flex flex-wrap gap-3 mt-5">
-                        {shortNav.map(({ name }, i) => (
-                            <Button key={i} className="text-sm">{name}</Button>
+                        {shortNav.map(({ name, target }, i) => (
+                            <a href={target} key={i}>
+                                <Button>{name}</Button>
+                            </a>
                         ))}
                     </div>
                     <div className="absolute left-0 -bottom-24">
                         Made By
-                        <img className="inline" src={NolaImg} />
+                        <a href="https://github.com/norman-andrians" target="_blank">
+                            <img className="inline hover:animate-wewew" src={NolaImg} />
+                        </a>
                         Norman Andrians
                     </div>
                 </div>

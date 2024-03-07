@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import BackroundImg from "../assets/img/background.png";
 
 export default function MainBody({ children }: { children?: ReactNode }) {
