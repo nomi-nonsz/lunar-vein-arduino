@@ -46,7 +46,12 @@ const INIT_VALUES: ControllerContextProps = {
             state: 127
         }
     ],
-    motoServo: [],
+    motoServo: [
+        {
+            pin: "A0",
+            state: 0
+        }
+    ],
     photoresistor: [
         {
             pin: "A0",

@@ -121,6 +121,43 @@ export function usePiezo () {
 
 
 
+export function useServo () {
+    const { motoServo, setMotoServo } = useContext(BoardControllerContext);
+
+    const getServo = (pin: number | string) => {
+        return motoServo.find(val => val.pin == pin);
+    }
+
+    const addServo = (pin: number | string, state: number) => {
+        const newPesistor = [...motoServo, { pin, state }];
+        setMotoServo!(newPesistor);
+    }
+
+    const removeServo = (index: number) => {
+        const newPesistor = motoServo.filter((_servo, i) => i != index);
+        setMotoServo!(newPesistor);
+    }
+
+    const setDegree = (pin: number | string, state: number) => {
+        const newPiezo = motoServo.map(servo => {
+            if (servo.pin == pin) return { pin, state };
+            return servo;
+        })
+        setMotoServo!(newPiezo);
+    }
+
+    const setServoPin = (index: number, newPin: number | string) => {
+        const newPesistor = motoServo.map((servo, i) => {
+            if (i == index) return { pin: newPin, state: servo.state };
+            return servo;
+        })
+        setMotoServo!(newPesistor);
+    }
+
+    return { motoServo, getServo, addServo, removeServo, setDegree, setServoPin };
+}
+
+
 export function usePhotoresistor () {
     const { photoresistor, setPhotoresistor } = useContext(BoardControllerContext);
 

@@ -10,10 +10,10 @@ import Button from "../forms/Button";
 function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }) {
     const { setResistorPin, removeResistor } = usePhotoresistor();
 
-    const [isListen, setListen] = useState(false);
+    const [isListen, setListen] = useState<boolean>(false);
 
-    const resistance = resistor.state;
-    const intensity = `${resistor.state / 1023 * 100}%`;
+    const resistance: number = Math.floor(resistor.state);
+    const intensity: number = Math.floor(100 - (resistor.state / 1023 * 100));
 
     const toggleListen = () => {
         setListen(!isListen);
@@ -46,7 +46,7 @@ function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }
                 />
                 <TwoRowTab
                     prop="Light Intensity"
-                    value={intensity}
+                    value={`${intensity}%`}
                 />
                 <EvoInput
                     className="h-10"

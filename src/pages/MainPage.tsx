@@ -11,6 +11,7 @@ import ControlNav from "../data/control-navigation.json";
 import ControlRgbLed from "../components/landing/ControlRgbLed";
 import ControlPiezo from "../components/landing/ControlPiezo";
 import ControlPhotoresistor from "../components/landing/ControlPhotoresistor";
+import ControlServo from "../components/landing/ControlServo";
 
 function MainPage () {
     const led = useRef<HTMLDivElement | null>(null);
@@ -27,6 +28,7 @@ function MainPage () {
             <ControlLED refto={led} />
             <ControlRgbLed refto={rgbLed} />
             <ControlPiezo refto={piezo} />
+            <ControlServo />
             <ControlPhotoresistor />
         </MainBody>
     </>)

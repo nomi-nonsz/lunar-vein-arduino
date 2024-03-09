@@ -58,30 +58,56 @@
     @apply grid grid-cols-8 gap-6;
 }
 
+@layer components {
+    .slider {
+        -webkit-appearance: none;
+        -webkit-transition: .15s;
+        color: #3a3affcc;
+        color: #3a3aff4d;
+        @apply appearance-none rounded-full w-full h-3 bg-primary bg-opacity-30 transition;
+    }
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        @apply appearance-none transition-all rounded-full w-5 h-5 bg-primary cursor-pointer;
+    }
+    .slider::-webkit-slider-thumb:hover {
+        -webkit-appearance: none;
+        box-shadow: 0 0 0 8px #3838ff66;
+    }
+    .slider::-webkit-slider-thumb:active {
+        -webkit-appearance: none;
+        box-shadow: 0 0 0 12px #3838ff66;
+        @apply w-6 h-6;
+    }
+    .slider::-moz-range-thumb {
+        @apply w-5 h-5 bg-primary cursor-pointer;
+    }
 
-.switch {
-    @apply rounded-lg transition;
-}
-.switch > .handler {
-    @apply rounded-md p-[6px] transition-[margin];
-}
 
 
-.btn {
-    @apply px-5 py-4 transition font-roboto-mono rounded-lg
-}
-
-
-.switch-on {
-    @apply border-primary bg-primary bg-opacity-40;
-}
-.switch-on > .handler {
-    @apply bg-primary ms-[50%];
-}
-
-.switch-off {
-    @apply border-disabled bg-transparent;
-}
-.switch-off > .handler {
-    @apply bg-disabled ms-0;
+    .btn {
+        @apply px-5 py-4 transition font-roboto-mono rounded-lg
+    }
+    
+    
+    .switch {
+        @apply rounded-lg transition;
+    }
+    .switch > .handler {
+        @apply rounded-md p-[6px] transition-[margin];
+    }
+    
+    .switch-on {
+        @apply border-primary bg-primary bg-opacity-40;
+    }
+    .switch-on > .handler {
+        @apply bg-primary ms-[50%];
+    }
+    
+    .switch-off {
+        @apply border-disabled bg-transparent;
+    }
+    .switch-off > .handler {
+        @apply bg-disabled ms-0;
+    }
 }
