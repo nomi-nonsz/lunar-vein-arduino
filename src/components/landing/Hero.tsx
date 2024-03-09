@@ -36,10 +36,10 @@ function Hero ({ img, shortNav, refs }: InHero) {
                             >{name}</Button>
                         ))}
                     </div>
-                    <div className="absolute left-0 -bottom-24">
+                    <div className="absolute left-0 -bottom-24 group">
                         Made By
                         <a href="https://github.com/norman-andrians" target="_blank">
-                            <img className="inline hover:animate-wewew" src={NolaImg} />
+                            <img className="inline group-hover:animate-wewew" src={NolaImg} />
                         </a>
                         Norman Andrians
                     </div>

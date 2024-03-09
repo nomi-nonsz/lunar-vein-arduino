@@ -2,7 +2,7 @@ import { ReactNode, Ref } from "react";
 
 interface ControlSectionProps {
     title: string;
-    description?: string;
+    description?: string | ReactNode;
     id?: string;
     refto?: Ref<HTMLDivElement>
     stack: ReactNode;
@@ -24,7 +24,7 @@ export default function ControlSection ({
                     <h2 className="text-4xl font-poppins font-bold leading-normal mb-4">
                         {title}
                     </h2>
-                    <p>{description}</p>
+                    {description && <p className="mb-8">{description}</p>}
                     <div className={`flex flex-wrap gap-6`}>
                         {stack}
                     </div>

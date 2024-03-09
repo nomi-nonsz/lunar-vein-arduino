@@ -148,6 +148,9 @@ function ControlRgbLed ({ refto }: { refto?: Ref<HTMLDivElement> }) {
                     <h2 className="text-4xl font-poppins font-bold leading-normal mb-4">
                         RGB LED
                     </h2>
+                    <div className="grid grid-cols-8 mb-8">
+                        <p className="col-span-6">RGB LED is a type of Light Emitting Diode that has the ability to produce light in three basic colors, red {"("}R{")"}, green {"("}G{")"}, and blue {"("}B{")"}. By controlling the intensity of these three colors separately, RGB LEDs allow the creation of a variety of different colors</p>
+                    </div>
                     <div className={`grid grid-cols-9 gap-6`}>
                         {rgbLed.map((led, i) => (
                         <HorizontalBar

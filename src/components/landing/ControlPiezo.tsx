@@ -33,7 +33,7 @@ function PiezoItem ({ piezo, index }: { piezo: DynamicPinState, index: number })
                     if (!Number.isNaN(freq)) setFrequency(piezo.pin, freq);
                 }}
             />
-            <Button.Primary className="text-sm py-0 h-11">Play</Button.Primary>
+            <Button.Primary className="text-sm !py-0 h-11">Play</Button.Primary>
         </div>
     )
 }
@@ -56,6 +56,9 @@ function ControlPiezo ({ refto }: { refto?: Ref<HTMLDivElement> }) {
         <ControlSection
             title="Piezo Buzzer"
             id="piezo"
+            description={<>
+            Piezo buzzer is a type of transducer that converts electrical signals into sound. It uses piezoelectric elements to generate mechanical vibrations that then produce sound. Piezo buzzer can produce sound with a given frequency depending on its characteristics
+            </>}
             refto={refto}
             stack={(<>
                 {piezos.map((piezo, i) => (

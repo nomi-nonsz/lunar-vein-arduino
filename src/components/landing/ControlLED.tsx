@@ -22,6 +22,9 @@ function ControlLED ({ refto }: { refto?: Ref<HTMLDivElement> }) {
         <ControlSection
             title="LED"
             id="led"
+            description={<>
+            Light Emitting Diode {"("}LED{")"} is one of the simplest Arduino electronics components, it is a type of semiconductor diode that produces light when an electric current flows through it.
+            </>}
             refto={refto}
             stack={(<>
                 {leds.map((led, i) => (
