@@ -47,7 +47,12 @@ const INIT_VALUES: ControllerContextProps = {
         }
     ],
     motoServo: [],
-    photoresistor: [],
+    photoresistor: [
+        {
+            pin: "A0",
+            state: 0
+        }
+    ],
 }
 
 export const BoardControllerContext = createContext<ControllerContextProps>(INIT_VALUES);

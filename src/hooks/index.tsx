@@ -6,6 +6,7 @@ export function usePin () {
     return useContext(BoardControllerContext);
 }
 
+
 export function useLed () {
     const { leds, setLeds } = useContext(BoardControllerContext);
 
@@ -116,4 +117,34 @@ export function usePiezo () {
     }
 
     return { piezo, getPiezo, addPiezo, removePiezo, setFrequency, setPiezoPin };
+}
+
+
+
+export function usePhotoresistor () {
+    const { photoresistor, setPhotoresistor } = useContext(BoardControllerContext);
+
+    const getResistor = (pin: number | string) => {
+        return photoresistor.find(val => val.pin == pin);
+    }
+
+    const addResistor = (pin: number | string, state: number) => {
+        const newPesistor = [...photoresistor, { pin, state }];
+        setPhotoresistor!(newPesistor);
+    }
+
+    const removeResistor = (index: number) => {
+        const newPesistor = photoresistor.filter((_resist, i) => i != index);
+        setPhotoresistor!(newPesistor);
+    }
+
+    const setResistorPin = (index: number, newPin: number | string) => {
+        const newPesistor = photoresistor.map((resist, i) => {
+            if (i == index) return { pin: newPin, state: resist.state };
+            return resist;
+        })
+        setPhotoresistor!(newPesistor);
+    }
+
+    return { photoresistor, getResistor, addResistor, removeResistor, setResistorPin };
 }

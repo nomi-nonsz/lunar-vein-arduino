@@ -30,6 +30,17 @@
     to { opacity: 1; }
 }
 
+@keyframes size-fade-in {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 @keyframes wewew {
     0% { transform: scale(1, 1); }
     12% { transform: scale(1.1, .9); }
@@ -47,11 +58,17 @@
     @apply grid grid-cols-8 gap-6;
 }
 
+
 .switch {
     @apply rounded-lg transition;
 }
 .switch > .handler {
     @apply rounded-md p-[6px] transition-[margin];
+}
+
+
+.btn {
+    @apply px-5 py-4 transition font-roboto-mono rounded-lg
 }
 
 

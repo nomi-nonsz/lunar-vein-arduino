@@ -24,6 +24,7 @@ export default {
       animation: {
         'size-in': 'size-in .3s ease-in-out',
         'fade-in': 'fade-in .3s ease-in-out',
+        'size-fade-in': 'size-fade-in .3s ease-in-out',
         'wewew': 'wewew .9s ease-in-out infinite',
       }
     },
