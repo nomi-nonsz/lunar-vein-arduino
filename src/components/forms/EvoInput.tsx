@@ -22,10 +22,10 @@ export default function EvoInput ({
     }
 
     return (
-        <label className={`flex cursor-pointer bg-finn border border-border rounded-lg ${className}`} onClick={handleClick}>
-            <div className="flex-1 w-1/2 p-2">{name}</div>
+        <label className={`flex items-center justify-between cursor-pointer bg-finn border border-border rounded-lg ${className}`} onClick={handleClick}>
+            <div className="w-fit p-2 text-sm ps-4">{name}</div>
             <input
-                className="flex-1 w-1/2 h-full p-2 text-center bg-transparent"
+                className="w-1/2 h-full p-2 text-center text-sm font-roboto-mono bg-transparent"
                 type={type}
                 name=""
                 id=""

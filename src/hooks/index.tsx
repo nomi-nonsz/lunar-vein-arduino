@@ -10,8 +10,7 @@ export function useLed () {
     const { leds, setLeds } = useContext(BoardControllerContext);
 
     const getLed = (pin: number | string) => {
-        const led = leds.find(val => val.pin == pin);
-        return led;
+        return leds.find(val => val.pin == pin);
     }
 
     const addLed = (pin: number | string, state?: boolean) => {
@@ -79,4 +78,42 @@ export function useRgbLed () {
     }
 
     return { rgbLed, getLed, setLed, addLed, removeLed };
+}
+
+
+
+export function usePiezo () {
+    const { piezo, setPiezo } = useContext(BoardControllerContext);
+
+    const getPiezo = (pin: number | string) => {
+        return piezo.find(val => val.pin == pin);
+    }
+
+    const addPiezo = (pin: number | string, state: number) => {
+        const newPiezo = [...piezo, { pin, state }];
+        setPiezo!(newPiezo);
+    }
+
+    const removePiezo = (index: number) => {
+        const newPiezo = piezo.filter((_piezo, i) => i != index);
+        setPiezo!(newPiezo);
+    }
+
+    const setFrequency = (pin: number | string, state: number) => {
+        const newPiezo = piezo.map(piezo => {
+            if (piezo.pin == pin) return { pin, state };
+            return piezo;
+        })
+        setPiezo!(newPiezo);
+    }
+
+    const setPiezoPin = (index: number | string, newPin: number | string) => {
+        const newPiezo = piezo.map((piezo, i) => {
+            if (i == index) return { pin: newPin, state: piezo.state };
+            return piezo;
+        })
+        setPiezo!(newPiezo);
+    }
+
+    return { piezo, getPiezo, addPiezo, removePiezo, setFrequency, setPiezoPin };
 }

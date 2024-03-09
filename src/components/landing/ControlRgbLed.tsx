@@ -2,7 +2,7 @@ import { useRgbLed } from "../../hooks";
 import { ChannelPinState, PinState } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
 import Switch from "../forms/Switch";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { MouseEventHandler, Ref, useEffect, useState } from "react";
 
 interface HorizontalBarProps {
     pinState: ChannelPinState;
@@ -31,15 +31,15 @@ function HorizontalBar ({ pinState, onUpdate, onDelete }: HorizontalBarProps) {
     }, [red, green, blue])
 
     return (
-        <div className="flex flex-col col-span-3 gap-2 animate-fade-in">
-            <button className="ms-auto bg-finn border border-border rounded-lg px-5" onClick={onDelete}>
+        <div className="flex flex-col col-span-3 gap-2 animate-fade-in font-roboto-mono">
+            <button className="ms-auto bg-finn hover:bg-secondary transition border border-border rounded-lg px-5" onClick={onDelete}>
                 <i className="bi bi-dash text-xl"></i>
             </button>
             <div className="bg-secondary animate-size-in rounded-lg border border-border p-4 flex gap-3">
                 <div className="flex-1 text-center flex flex-col gap-3">
                     <div className="text-[#FF4444]">Red</div>
                     <EvoInput
-                        name="pin"
+                        name="Pin"
                         value={red.pin.toString()}
                         type="number"
                         onChange={(e) => {
@@ -62,7 +62,7 @@ function HorizontalBar ({ pinState, onUpdate, onDelete }: HorizontalBarProps) {
                 <div className="flex-1 text-center flex flex-col gap-3">
                     <div className="text-[#48FF44]">Green</div>
                     <EvoInput
-                        name="pin"
+                        name="Pin"
                         value={green.pin.toString()}
                         type="number"
                         onChange={(e) => {
@@ -85,7 +85,7 @@ function HorizontalBar ({ pinState, onUpdate, onDelete }: HorizontalBarProps) {
                 <div className="flex-1 text-center flex flex-col gap-3">
                     <div className="text-[#4844FF]">Blue</div>
                     <EvoInput
-                        name="pin"
+                        name="Pin"
                         value={blue.pin.toString()}
                         type="number"
                         onChange={(e) => {
@@ -113,7 +113,7 @@ function HorizontalBar ({ pinState, onUpdate, onDelete }: HorizontalBarProps) {
 function HorizontalBarPlus ({ onClick }: { onClick?: MouseEventHandler<HTMLButtonElement> }) {
     return (
         <button
-            className="bg-finn hover:bg-secondary transition col-span-3 rounded-lg border border-border flex items-center justify-center mt-10"
+            className="bg-finn h-40 hover:bg-secondary transition col-span-3 rounded-lg border border-border flex items-center justify-center mt-10"
             onClick={onClick}
         >
             <i className="bi bi-plus text-6xl text-border"></i>
@@ -121,7 +121,7 @@ function HorizontalBarPlus ({ onClick }: { onClick?: MouseEventHandler<HTMLButto
     )
 }
 
-function ControlRgbLed () {
+function ControlRgbLed ({ refto }: { refto?: Ref<HTMLDivElement> }) {
     const { addLed, rgbLed, removeLed, setLed } = useRgbLed();
 
     const handleAdd = (): void => {
@@ -142,7 +142,7 @@ function ControlRgbLed () {
     }
 
     return (
-        <div className="container py-16" id="rgb-led">
+        <div className="container py-16" id="rgb-led" ref={refto}>
             <div className="container-grid items-center relative">
                 <div className={`col-span-8`}>
                     <h2 className="text-4xl font-poppins font-bold leading-normal mb-4">

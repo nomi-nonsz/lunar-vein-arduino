@@ -4,38 +4,25 @@ import Switch from "./Switch";
 interface PinBoxProps {
     className?: string;
     value: number | string;
-    state: boolean;
     onValueChange?: ChangeEventHandler<HTMLInputElement | null>;
-    onStateChange?: FormEventHandler<HTMLButtonElement | null>;
     onDelete?: FormEventHandler<HTMLButtonElement | null>;
     minusBtn?: boolean;
 }
 
-function Add ({
-    className,
-    onClick
-}: {
-    className?: string,
-    onClick?: MouseEventHandler<HTMLButtonElement>
-}) {
-    return (
-        <button className={`bg-finn hover:bg-secondary transition border border-border rounded-lg flex items-center justify-center h-36 ${className}`} onClick={onClick}>
-            <i className="bi bi-plus text-border text-7xl"></i>
-        </button>
-    )
+interface ToggleProps extends PinBoxProps {
+    state: boolean;
+    onStateChange?: FormEventHandler<HTMLButtonElement | null>;
 }
 
 function PinBox ({
     className,
     value,
-    state,
     onValueChange,
-    onStateChange,
     onDelete,
     minusBtn
 }: PinBoxProps) {
     return (
-        <div className={`flex flex-col gap-3 animate-fade-in ${className}`}>
+        <div className={`flex flex-col gap-3 ${className}`}>
             {minusBtn && <button
                 className="border bg-transparent ms-auto hover:bg-secondary border-border rounded px-2"
                 onClick={onDelete}
@@ -56,6 +43,27 @@ function PinBox ({
                     onChange={onValueChange}
                 />
             </div>
+        </div>
+    )
+}
+
+function Toggle ({
+    className,
+    value,
+    minusBtn,
+    onDelete,
+    state,
+    onStateChange,
+    onValueChange
+}: ToggleProps) {
+    return (
+        <div className={`flex flex-col gap-6 ${className}`}>
+            <PinBox
+                value={value}
+                minusBtn={minusBtn}
+                onDelete={onDelete}
+                onValueChange={onValueChange}
+            />
             <Switch
                 state={state}
                 onChange={onStateChange}
@@ -64,6 +72,21 @@ function PinBox ({
     )
 }
 
+function Add ({
+    className,
+    onClick
+}: {
+    className?: string,
+    onClick?: MouseEventHandler<HTMLButtonElement>
+}) {
+    return (
+        <button className={`bg-finn hover:bg-secondary transition border border-border rounded-lg flex items-center justify-center h-36 ${className}`} onClick={onClick}>
+            <i className="bi bi-plus text-border text-7xl"></i>
+        </button>
+    )
+}
+
 PinBox.Add = Add;
+PinBox.Toggle = Toggle;
 
 export default PinBox;

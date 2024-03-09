@@ -1,5 +1,6 @@
 import Button from "../forms/Button";
 import NolaImg from "../../assets/img/ocs/nola_3.png";
+import { RefObject } from "react";
 
 type ShortNav = {
     name: string,
@@ -8,10 +9,11 @@ type ShortNav = {
 
 interface InHero {
     img: string;
-    shortNav: ShortNav[]
+    shortNav: ShortNav[];
+    refs?: RefObject<HTMLElement>[]
 }
 
-function Hero ({ img, shortNav }: InHero) {
+function Hero ({ img, shortNav, refs }: InHero) {
     return (
         <div className="h-screen container flex items-center">
             <div className="container-grid items-center relative">
@@ -24,10 +26,14 @@ function Hero ({ img, shortNav }: InHero) {
                         <small className="text-xs"> i don't even know anything about electronics and some IoT stuff lol</small>
                     </p>
                     <div className="flex flex-wrap gap-3 mt-5">
-                        {shortNav.map(({ name, target }, i) => (
-                            <a href={target} key={i}>
-                                <Button>{name}</Button>
-                            </a>
+                        {shortNav.map(({ name }, i) => (
+                            <Button
+                                key={i}
+                                onClick={() => {
+                                    if (refs && refs.length >= i)
+                                        refs[i].current?.scrollIntoView({ behavior: "smooth" });
+                                }}
+                            >{name}</Button>
                         ))}
                     </div>
                     <div className="absolute left-0 -bottom-24">

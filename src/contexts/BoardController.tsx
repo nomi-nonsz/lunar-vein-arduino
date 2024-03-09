@@ -40,7 +40,12 @@ const INIT_VALUES: ControllerContextProps = {
             }
         }
     ],
-    piezo: [],
+    piezo: [
+        {
+            pin: 6,
+            state: 127
+        }
+    ],
     motoServo: [],
     photoresistor: [],
 }

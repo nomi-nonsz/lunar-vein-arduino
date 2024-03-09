@@ -1,9 +1,10 @@
 import PinBox from "../forms/PinBox";
 import { useLed } from "../../hooks";
 import ControlSection from "../ControlSection";
+import { Ref } from "react";
 
 
-function ControlLED () {
+function ControlLED ({ refto }: { refto?: Ref<HTMLDivElement> }) {
     const { addLed, leds, removeLed, setLed, setLedPin } = useLed();
 
     const handleAdd = (): void => {
@@ -21,10 +22,11 @@ function ControlLED () {
         <ControlSection
             title="LED"
             id="led"
+            refto={refto}
             stack={(<>
                 {leds.map((led, i) => (
-                <PinBox
-                    className="w-36"
+                <PinBox.Toggle
+                    className="w-36 animate-fade-in"
                     key={i}
                     minusBtn={true}
                     value={led.pin}
