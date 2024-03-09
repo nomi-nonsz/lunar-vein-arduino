@@ -1,6 +1,6 @@
 import Button from "../forms/Button";
-import NolaImg from "../../assets/img/ocs/nola_3.png";
 import { RefObject } from "react";
+import MadeBy from "../info/MadeBy";
 
 type ShortNav = {
     name: string,
@@ -36,13 +36,7 @@ function Hero ({ img, shortNav, refs }: InHero) {
                             >{name}</Button>
                         ))}
                     </div>
-                    <div className="absolute left-0 -bottom-24 group">
-                        Made By
-                        <a href="https://github.com/norman-andrians" target="_blank">
-                            <img className="inline group-hover:animate-wewew" src={NolaImg} />
-                        </a>
-                        Norman Andrians
-                    </div>
+                    <MadeBy className="absolute left-0 -bottom-24" />
                 </div>
                 <div className="col-span-1"></div>
                 <div className="col-span-3">
