@@ -18,17 +18,22 @@ const io: Server = new Server(server, {
     }
 }); // I have no experience at WebSocket, so.. forgive me :)
 
+// Server configuration
 const host: string = 'localhost';
 const port: number = 3000;
 
+// Express middleware
 app.use(express.json());
 app.use(express.static('client'));
 
+// Socket.io event handlers
 io.on('connection', socketHandler);
 
+// HTTP Routes
 app.use('/', view);
-app.use('/api-arduino', isBoardConnected, api);
+app.use('/api-arduino', isBoardConnected, api); // Board API Controllers
 
+// Run server
 console.log("\nRunning Server...");
 server.listen(port, () => {
     console.log(`Server is connected and running in ${host} at port ${port} 🗣️🗣️🗣️`);

@@ -9,13 +9,14 @@ export function readLed (req: Request, res: Response): Response<string | any> {
         const { p } = req.params;
         const pin: number = Number.parseInt(p);
     
-        const pinState: digitalValue = board.pins[pin].value == 1 ? 'ON' : 'OFF';
+        const pinState: voltage = board.pins[pin].value == 1 ? 'HIGH' : 'LOW';
     
         return res.status(200).json({
             status: 200,
             pin_state: {
                 [pin]: pinState
-            }
+            },
+            message: `Led pin ${pin} is ${pinState}`
         });
     }
     catch (err) {
@@ -32,20 +33,18 @@ export function writeLed (req: Request, res: Response): Response<string | any> {
     const act: string = a.toLocaleLowerCase();
     const pin: number = Number.parseInt(p);
 
-    let state: digitalValue;
+    let state: voltage;
     let volt: voltage;
 
     try {
         switch (act) {
-            case 'on':
-                state = 'ON';
+            case 'on' || 'high':
+                state = 'HIGH';
                 volt = 1;
-                console.log(`${req.hostname} | ${pin} | LED: ${state}`);
                 break;
-            case 'off':
-                state = 'OFF';
+            case 'off' || 'low':
+                state = 'LOW';
                 volt = 0;
-                console.log(`${req.hostname} | ${pin} | LED: ${state}`);
                 break;
             default:
                 console.log(`${req.hostname} | ${pin} | LED: INVALID ACT`);
@@ -54,12 +53,17 @@ export function writeLed (req: Request, res: Response): Response<string | any> {
                     message: `Invalid act ${act}`
                 });
         }
-
+            
         board.digitalWrite(pin, volt);
+        
+        console.log(`${req.hostname} | ${pin} | LED: ${state}`);
 
         res.status(200).json({
             status: 200,
-            message: `Success changed pin ${pin} to state ${state}`
+            pin_state: {
+                [pin]: state
+            },
+            message: `Changed pin state ${pin} to ${state}`
         });
     }
     catch (err) {
@@ -147,19 +151,26 @@ export function writeRgbLed (req: Request, res: Response): Response<string | any
             isAnode: true
         })
 
+        const isHigh: boolean | string = true || 'HIGH' || 'high';
+
         led.red = new Led(r.pin);
         led.green = new Led(g.pin);
         led.blue = new Led(b.pin);
 
-        if (r.value == true) led.red.on(); else led.red.off();
-        if (g.value == true) led.green.on(); else led.green.off();
-        if (b.value == true) led.blue.on(); else led.blue.off();
+        if (r.value == isHigh) led.red.on(); else led.red.off();
+        if (g.value == isHigh) led.green.on(); else led.green.off();
+        if (b.value == isHigh) led.blue.on(); else led.blue.off();
 
         const pins: string = rgbLeds.map(c => c.pin.toString()).join(", ");
         const values: string = rgbLeds.map(c => `${c.value}`).join(", ");
 
         return res.status(200).json({
             status: 200,
+            pin_state: {
+                [r.pin]: led.red.isOn,
+                [g.pin]: led.green.isOn,
+                [b.pin]: led.blue.isOn
+            },
             message: `Success changed pins ${pins} to state ${values}`
         });
     }
