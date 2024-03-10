@@ -86,7 +86,7 @@
 
 
     .btn {
-        @apply px-5 py-4 transition font-roboto-mono rounded-lg
+        @apply px-5 py-4 transition font-roboto-mono rounded-lg transition-[transform] duration-75 scale-100 active:scale-90;
     }
     
     

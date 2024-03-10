@@ -1,6 +1,7 @@
 import PinBox from "../forms/PinBox";
 import ControlSection from "../ControlSection";
-import { Ref } from "react";
+import { PatchPiezo } from "../../controllers/BoardController";
+import { ChangeEvent, Ref, useEffect, useState } from "react";
 import { usePiezo } from "../../hooks";
 import { DynamicPinState } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
@@ -9,31 +10,48 @@ import Button from "../forms/Button";
 function PiezoItem ({ piezo, index }: { piezo: DynamicPinState, index: number }) {
     const { setFrequency, setPiezoPin, removePiezo } = usePiezo();
 
+    const [freq, setFreq] = useState<number | string>(piezo.state);
+
+    const handlePinChange = (e: ChangeEvent<HTMLInputElement | null>) => {
+        const pin = e.target?.value;
+        setPiezoPin(index, pin);
+    }
+
+    const handleFreqChange = (e: ChangeEvent<HTMLInputElement | null>) => {
+        setFreq(e.target.value);
+    }
+
+    const handleDelete = () => {
+        removePiezo(index);
+    }
+
+    const handlePatch = () => {
+        const pin: number = typeof piezo.pin == "string" ? Number.parseInt(piezo.pin) : piezo.pin;
+        PatchPiezo(pin, piezo.state);
+    }
+    
+    useEffect(() => {
+        const f: number = typeof freq == "string" ? Number.parseInt(freq) : freq;
+        if (!Number.isNaN(freq)) setFrequency(index, f);
+    }, [freq])
+
     return (
         <div className="flex flex-col gap-3">
             <PinBox
                 className="w-36 animate-fade-in"
                 minusBtn={true}
                 value={piezo.pin}
-                onValueChange={(e) => {
-                    const pin = e.target.value;
-                    setPiezoPin(index, pin);
-                }}
-                onDelete={() => {
-                    removePiezo(index);
-                }}
+                onValueChange={handlePinChange}
+                onDelete={handleDelete}
             />
             <EvoInput
                 className="w-36 h-11"
                 name="Frequency"
                 type="number"
                 value={piezo.state.toString()}
-                onChange={(e) => {
-                    const freq: number = Number.parseInt(e.target.value);
-                    if (!Number.isNaN(freq)) setFrequency(piezo.pin, freq);
-                }}
+                onChange={handleFreqChange}
             />
-            <Button.Primary className="text-sm !py-0 h-11">Play</Button.Primary>
+            <Button.Primary onClick={handlePatch} className="text-sm !py-0 h-11">Play</Button.Primary>
         </div>
     )
 }

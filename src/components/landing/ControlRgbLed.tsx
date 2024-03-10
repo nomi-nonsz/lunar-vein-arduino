@@ -1,3 +1,4 @@
+import { PatchRgbLed } from "../../controllers/BoardController";
 import { useRgbLed } from "../../hooks";
 import { ChannelPinState, PinState } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
@@ -5,34 +6,51 @@ import Switch from "../forms/Switch";
 import { MouseEventHandler, Ref, useEffect, useState } from "react";
 
 interface HorizontalBarProps {
-    pinState: ChannelPinState;
-    onUpdate?: (pin: ChannelPinState) => void;
-    onDelete?: () => void
+    rgbLed: ChannelPinState;
+    index: number;
 }
 
-function HorizontalBar ({ pinState, onUpdate, onDelete }: HorizontalBarProps) {
+function HorizontalBar ({ rgbLed, index }: HorizontalBarProps) {
+    const { removeLed, setLed } = useRgbLed();
+
+    const handleUpdate = (led: ChannelPinState) => {
+        setLed(index, led);
+    }
+
+    const handleRemove = () => {
+        removeLed(index);
+    }
+
     const [red, setRed] = useState<PinState>({
-        pin: pinState.red.pin.toString(),
-        state: pinState.red.state
+        pin: rgbLed.red.pin.toString(),
+        state: rgbLed.red.state
     });
 
     const [green, setGreen] = useState<PinState>({
-        pin: pinState.green.pin.toString(),
-        state: pinState.green.state
+        pin: rgbLed.green.pin.toString(),
+        state: rgbLed.green.state
     });
 
     const [blue, setBlue] = useState<PinState>({
-        pin: pinState.blue.pin.toString(),
-        state: pinState.blue.state
+        pin: rgbLed.blue.pin.toString(),
+        state: rgbLed.blue.state
     });
 
     useEffect(() => {
-        if (onUpdate) onUpdate({red, green, blue});
-    }, [red, green, blue])
+        handleUpdate({red, green, blue});
+    }, [red, green, blue]);
+
+    useEffect(() => {
+        PatchRgbLed(rgbLed);
+    }, [
+        rgbLed.red.state,
+        rgbLed.green.state,
+        rgbLed.blue.state
+    ]);
 
     return (
         <div className="flex flex-col col-span-3 gap-2 animate-fade-in font-roboto-mono">
-            <button className="ms-auto bg-finn hover:bg-secondary transition border border-border rounded-lg px-5" onClick={onDelete}>
+            <button className="ms-auto bg-finn hover:bg-secondary transition border border-border rounded-lg px-5" onClick={handleRemove}>
                 <i className="bi bi-dash text-xl"></i>
             </button>
             <div className="bg-secondary animate-size-in rounded-lg border border-border p-4 flex gap-3">
@@ -122,7 +140,7 @@ function HorizontalBarPlus ({ onClick }: { onClick?: MouseEventHandler<HTMLButto
 }
 
 function ControlRgbLed ({ refto }: { refto?: Ref<HTMLDivElement> }) {
-    const { addLed, rgbLed, removeLed, setLed } = useRgbLed();
+    const { addLed, rgbLed } = useRgbLed();
 
     const handleAdd = (): void => {
         addLed({
@@ -155,13 +173,8 @@ function ControlRgbLed ({ refto }: { refto?: Ref<HTMLDivElement> }) {
                         {rgbLed.map((led, i) => (
                         <HorizontalBar
                             key={i}
-                            pinState={led}
-                            onUpdate={(newLed) => {
-                                setLed(i, newLed);
-                            }}
-                            onDelete={() => {
-                                removeLed(i);
-                            }}
+                            index={i}
+                            rgbLed={led}
                         />
                         ))}
                         {rgbLed.length < 5 && <HorizontalBarPlus

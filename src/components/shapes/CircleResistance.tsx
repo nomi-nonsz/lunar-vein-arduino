@@ -3,7 +3,7 @@ interface CircleResistanceProps {
     width?: number;
     height?: number;
     blur?: number;
-    resistance?: number;
+    intensity?: number;
 }
 
 export default function CircleResistance({
@@ -11,7 +11,7 @@ export default function CircleResistance({
     width,
     height,
     blur,
-    resistance,
+    intensity,
 }: CircleResistanceProps) {
     return (
         <div
@@ -24,14 +24,15 @@ export default function CircleResistance({
             }}
         >
             <div
+                className="transition-opacity duration-75"
                 style={{
                     backgroundColor: "white",
                     borderRadius: 999,
                     width: width || 122,
                     height: height || 122,
                     filter: `blur(${blur || 12}px)`,
-                    boxShadow: '0 0 52 22 #FF2929',
-                    opacity: resistance ? resistance/1023*100 : 0
+                    boxShadow: '0 0 52px 22px #FF2929',
+                    opacity: intensity+"%"
                 }}
             ></div>
         </div>

@@ -1,14 +1,15 @@
-import { ChangeEvent, MouseEventHandler, Ref, useState } from "react";
+import { ChangeEvent, MouseEventHandler, Ref, useEffect, useState } from "react";
 import { usePhotoresistor } from "../../hooks";
 import { DynamicPinState } from "../../types/board";
 import CircleResistance from "../shapes/CircleResistance";
 import TwoRowTab from "../info/TwoRowTab";
 import EvoInput from "../forms/EvoInput";
 import Button from "../forms/Button";
+import { io } from "../../socket/socket.io";
 
 
 function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }) {
-    const { setResistorPin, removeResistor } = usePhotoresistor();
+    const { setResistorPin, setResistance, removeResistor } = usePhotoresistor();
 
     const [isListen, setListen] = useState<boolean>(false);
 
@@ -27,6 +28,26 @@ function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }
         removeResistor(index);
     }
 
+    useEffect(() => {
+        const pin = typeof resistor.pin == "string" && resistor.pin[0] == "A" ?
+        resistor.pin[1] : resistor.pin;
+        
+        if (isListen) {
+            io.emit("set-photoresistor", pin);
+
+            const handler = (value: string) => {
+                const res: number = Number.parseInt(value);
+                setResistance(resistor.pin, res);
+            }
+            
+            io.on("photoresistor", handler);
+            
+            return () => {
+                io.off("photoresistor", handler);
+            }
+        }
+    }, [io, isListen]);
+
     return (
         <div className="border border-border bg-secondary col-span-2 rounded-lg p-6 animate-size-fade-in">
             <div className="flex justify-items-end">
@@ -36,7 +57,7 @@ function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }
             </div>
             <div className="h-52 flex items-center justify-center">
                 <CircleResistance
-                    resistance={0}
+                    intensity={intensity}
                 />
             </div>
             <div className="flex flex-col mt-3 gap-3">
@@ -98,7 +119,7 @@ function ControlPhotoresistor ({ refto }: { refto?: Ref<HTMLDivElement> }) {
                         Photoresistor
                     </h2>
                     <div className="grid grid-cols-8 mb-8">
-                        <p className="col-span-6">Also known as LDR (Light Dependent Resistor), it is an electronic component whose resistance changes based on the intensity of light it receives. The higher the light intensity, the lower the resistance, When exposed to intense light, a photoresistor experiences a decrease in resistance due to photoconduction. The molecules in the photoresistor material become more active and allow electric current to flow through the material more easily.</p>
+                        <p className="col-span-6">Also known as LDR {"("}Light Dependent Resistor{")"}, it is an electronic component whose resistance changes based on the intensity of light it receives. The higher the light intensity, the lower the resistance, When exposed to intense light, a photoresistor experiences a decrease in resistance due to photoconduction. The molecules in the photoresistor material become more active and allow electric current to flow through the material more easily.</p>
                     </div>
                     <div className={`grid grid-cols-8 gap-6`}>
                         {resistors.map((resistor, i) => (

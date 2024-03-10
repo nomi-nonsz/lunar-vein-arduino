@@ -15,8 +15,7 @@ export function useLed () {
     }
 
     const addLed = (pin: number | string, state?: boolean) => {
-        const newLed = [...leds, { pin, state: state || false }];
-        setLeds!(newLed);
+        setLeds!(led => [...led, { pin, state: state || false }]);
     }
 
     const removeLed = (index: number) => {
@@ -100,12 +99,11 @@ export function usePiezo () {
         setPiezo!(newPiezo);
     }
 
-    const setFrequency = (pin: number | string, state: number) => {
-        const newPiezo = piezo.map(piezo => {
-            if (piezo.pin == pin) return { pin, state };
+    const setFrequency = (index: number, state: number) => {
+        setPiezo!(piezos => piezos.map((piezo, i) => {
+            if (i == index) return { pin: piezo.pin, state: state };
             return piezo;
-        })
-        setPiezo!(newPiezo);
+        }));
     }
 
     const setPiezoPin = (index: number | string, newPin: number | string) => {
@@ -175,6 +173,14 @@ export function usePhotoresistor () {
         setPhotoresistor!(newPesistor);
     }
 
+    const setResistance = (pin: number | string, state: number) => {
+        const resistor = photoresistor.map(resist => {
+            if (resist.pin == pin) return { pin: resist.pin, state };
+            return resist;
+        })
+        setPhotoresistor!(resistor);
+    }
+
     const setResistorPin = (index: number, newPin: number | string) => {
         const newPesistor = photoresistor.map((resist, i) => {
             if (i == index) return { pin: newPin, state: resist.state };
@@ -183,5 +189,5 @@ export function usePhotoresistor () {
         setPhotoresistor!(newPesistor);
     }
 
-    return { photoresistor, getResistor, addResistor, removeResistor, setResistorPin };
+    return { photoresistor, getResistor, addResistor, removeResistor, setResistance, setResistorPin };
 }

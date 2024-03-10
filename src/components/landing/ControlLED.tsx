@@ -1,11 +1,46 @@
+import { ChangeEvent, Ref, useEffect } from "react";
 import PinBox from "../forms/PinBox";
 import { useLed } from "../../hooks";
 import ControlSection from "../ControlSection";
-import { Ref } from "react";
+import { PinState } from "../../types/board";
+import { PatchLed } from "../../controllers/BoardController";
 
+function LedItem ({ led, index }: { led: PinState, index: number }) {
+    const { removeLed, setLed, setLedPin } = useLed();
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement | null>) => {
+        const pin = e.target?.value;
+        setLedPin(index, pin);
+    }
+
+    const toggleLed = () => {
+        setLed(led.pin, !led.state);
+    }
+
+    const handleRemove = () => {
+        removeLed(index);
+    }
+
+    useEffect(() => {
+        const pin: number = typeof led.pin == "string" ? Number.parseInt(led.pin) : led.pin;
+        PatchLed(pin, led.state);
+    }, [led.state]);
+
+    return (
+        <PinBox.Toggle
+            className="w-36 animate-fade-in"
+            minusBtn={true}
+            value={led.pin}
+            state={led.state}
+            onValueChange={handleChange}
+            onStateChange={toggleLed}
+            onDelete={handleRemove}
+        />
+    )
+}
 
 function ControlLED ({ refto }: { refto?: Ref<HTMLDivElement> }) {
-    const { addLed, leds, removeLed, setLed, setLedPin } = useLed();
+    const { addLed, leds } = useLed();
 
     const handleAdd = (): void => {
         let anopin = 13;
@@ -28,23 +63,10 @@ function ControlLED ({ refto }: { refto?: Ref<HTMLDivElement> }) {
             refto={refto}
             stack={(<>
                 {leds.map((led, i) => (
-                <PinBox.Toggle
-                    className="w-36 animate-fade-in"
-                    key={i}
-                    minusBtn={true}
-                    value={led.pin}
-                    state={led.state}
-                    onValueChange={(e) => {
-                        const pin = e.target.value;
-                        setLedPin(i, pin);
-                    }}
-                    onStateChange={() => {
-                        const state = !led.state;
-                        setLed(led.pin, state);
-                    }}
-                    onDelete={() => {
-                        removeLed(i);
-                    }}
+                    <LedItem
+                        led={led}
+                        index={i}
+                        key={i}
                     />
                 ))}
                 {leds.length < 14 && <PinBox.Add

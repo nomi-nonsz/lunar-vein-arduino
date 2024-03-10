@@ -4,6 +4,7 @@ import { DynamicPinState } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
 import Button from "../forms/Button";
 import { Slider } from "../forms/Slider";
+import { PatchServo } from "../../controllers/BoardController";
 
 
 function Bar ({ index, servo }: { index: number, servo: DynamicPinState }) {
@@ -16,6 +17,10 @@ function Bar ({ index, servo }: { index: number, servo: DynamicPinState }) {
         const deg = Math.floor((percentage / 1000) * 180);
         setDegree(servo.pin, deg);
     }, [percentage]);
+
+    useEffect(() => {
+        if (isListen) PatchServo(servo.pin, servo.state);
+    }, [isListen, servo.state])
 
     const toggleListen = () => {
         setListen(!isListen);
