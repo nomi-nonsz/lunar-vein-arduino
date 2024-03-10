@@ -1,5 +1,6 @@
 import http from 'node:http';
 import express from 'express';
+import cors from 'cors';
 import { Server } from 'socket.io';
 import chalk from 'chalk';
 
@@ -23,6 +24,9 @@ const host: string = 'localhost';
 const port: number = 3000;
 
 // Express middleware
+app.use(cors({
+    origin: "*"
+}));
 app.use(express.json());
 app.use(express.static('client'));
 

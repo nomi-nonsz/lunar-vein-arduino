@@ -2,7 +2,7 @@ import { Board, Pin, PinMode } from "johnny-five";
 
 const board: Board = new Board({
     port: '/dev/ttyUSB0',
-    debug: false,
+    debug: true,
     repl: false
 });
 
