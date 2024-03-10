@@ -29,7 +29,7 @@ Arduino assembly guide also available in [johnny-five](https://github.com/rwaldr
 
 2. Add `.env` file in the project root directory with the `SERIAL_PORT` variable
 
-    ```
+    ```dotenv
     SERIAL_PORT=/dev/ttyUSB0
     ```
 
