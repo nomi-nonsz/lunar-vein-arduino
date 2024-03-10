@@ -1,4 +1,5 @@
 import http from 'node:http';
+import path from 'node:path';
 import express from 'express';
 import cors from 'cors';
 import { Server } from 'socket.io';
@@ -24,11 +25,9 @@ const host: string = 'localhost';
 const port: number = 3000;
 
 // Express middleware
-app.use(cors({
-    origin: "*"
-}));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
-app.use(express.static('client'));
+app.use(express.static(path.join(__dirname, 'client')));
 
 // Socket.io event handlers
 io.on('connection', socketHandler);

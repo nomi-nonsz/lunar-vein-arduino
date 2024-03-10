@@ -39,6 +39,10 @@ Arduino assembly guide also available in [johnny-five](https://github.com/rwaldr
     npm start
     ```
 
+4. If the board is connected try to open the client page in [https://localhost:3000/](https://localhost:3000/)
+
+    ![Client page](./docs/client.png)
+
 #### Other scripts
 - You can see what ports are connected to the device by running `npm run ports` script.
 
@@ -153,7 +157,7 @@ async function turnOnLed() {
     | p | pin | `string` | true | Seleced pin |
     | m | mode | `'input'`, `'output'`, `'servo'` | true | Pin Mode |
 
-- **Method(s)**
+- **Method**
 
     `PATCH`
 
@@ -214,7 +218,7 @@ async function turnOnLed() {
     | p | pin | `string` | true | Seleced pin |
     | a | act | `'on'`, `'off'`, `'high'`, `'low'` | true | Action |
 
-- **Method(s)**
+- **Method**
 
     `PATCH`
 
@@ -290,7 +294,7 @@ async function turnOnLed() {
     }
     ```
 
-- **Method(s)**
+- **Method**
 
     `PATCH`
 
