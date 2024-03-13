@@ -1,6 +1,11 @@
 import { useContext } from "react";
 import { BoardControllerContext } from "../contexts/BoardController";
-import { ChannelPinState } from "../types/board";
+import { ChannelPinState, PiezoMusic } from "../types/board";
+
+
+// * -----------------------------------
+// * I'm never use OOP in react lol
+// * -----------------------------------
 
 export function usePin () {
     return useContext(BoardControllerContext);
@@ -117,6 +122,105 @@ export function usePiezo () {
     return { piezo, getPiezo, addPiezo, removePiezo, setFrequency, setPiezoPin };
 }
 
+
+
+export function usePiezoMusic () {
+    const { piezeNotes, setNotes } = useContext(BoardControllerContext);
+
+    const getPiezo = (pin: number | string) => {
+        return piezeNotes.find(val => val.pin == pin);
+    }
+
+    const addPiezo = (notes: PiezoMusic) => {
+        const newPiezo = [...piezeNotes, notes];
+        setNotes!(newPiezo);
+    }
+
+    const setPiezo = (index: number, piezo: PiezoMusic) => {
+        setNotes!(piezos => piezos.map((_piezo, i) => {
+            if (i == index) return piezo;
+            return _piezo;
+        }));
+    }
+
+    const removePiezo = (index: number) => {
+        const newPiezo = piezeNotes.filter((_piezo, i) => i != index);
+        setNotes!(newPiezo);
+    }
+
+    const addNote = (piezoIndex: number, note: string) => {
+        setNotes!(piezos => piezos.map((piezo, i) => {
+            if (piezoIndex == i) {
+                piezo.notes.push(note);
+            }
+            return piezo;
+        }));
+    }
+
+    const changeNote = (piezoIndex: number, noteIndex: number, note: string) => {
+        setNotes!(piezos => piezos.map((piezo, i) => {
+            if (piezoIndex == i) {
+                piezo.notes[noteIndex] = note;
+            }
+            return piezo;
+        }));
+    }
+
+    const removeNote = (piezoIndex: number, noteIndex: number) => {
+        setNotes!(piezos => piezos.map((piezo, i) => {
+            if (piezoIndex == i) {
+                piezo.notes = piezo.notes.filter((_p, i) => i != noteIndex);
+            }
+            return piezo;
+        }));
+    }
+
+    const setPin = (index: number, newPin: string | number) => {
+        const newPiezo: PiezoMusic[] = piezeNotes.map((piezo, i) => {
+            if (i == index) {
+                piezo.pin = newPin;
+            }
+            return piezo;
+        })
+        setNotes!(newPiezo);
+    }
+
+    const setName = (index: number, name: string) => {
+        const newPiezo: PiezoMusic[] = piezeNotes.map((piezo, i) => {
+            if (i == index) {
+                piezo.name = name;
+            }
+            return piezo;
+        })
+        setNotes!(newPiezo);
+    }
+
+    const setBeat = (index: number, beats: number) => {
+        const newPiezo: PiezoMusic[] = piezeNotes.map((piezo, i) => {
+            if (i == index) {
+                piezo.beats = beats;
+            }
+            return piezo;
+        })
+        setNotes!(newPiezo);
+    }
+
+    const setTempo = (index: number, tempo: number) => {
+        const newPiezo: PiezoMusic[] = piezeNotes.map((piezo, i) => {
+            if (i == index) {
+                piezo.tempo = tempo;
+            }
+            return piezo;
+        })
+        setNotes!(newPiezo);
+    }
+
+    return {
+        piezeNotes, setNotes, getPiezo, addPiezo, removePiezo, setPiezo,
+        setPin, setName, setBeat, setTempo,
+        addNote, changeNote, removeNote
+    };
+}
 
 
 export function useServo () {

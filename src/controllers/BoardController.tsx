@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ChannelPinState } from "../types/board";
+import { ChannelPinState, PiezoMusic } from "../types/board";
 import { io } from "../socket/socket.io";
 
 const url = "http://localhost:3000/api-arduino";
@@ -45,6 +45,18 @@ export async function PatchPiezo (pin: number, freq: number) {
 
     console.log("Piezo Response: ", data);
 }
+
+export async function PatchPiezoMusic (music: PiezoMusic) {
+    const res = await axios.patch(`${url}/piezo/music`, music, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = res.data;
+
+    console.log("Piezo Response: ", data);
+}
+
 
 export async function PatchServo(pin: string | number, value: number) {
     io.emit("servo", pin, value);

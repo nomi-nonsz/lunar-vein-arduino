@@ -27,7 +27,7 @@ export default function EvoInput ({
             <input
                 className="w-1/2 h-full p-2 text-right pe-4 text-sm font-roboto-mono bg-transparent"
                 type={type}
-                name=""
+                name={name}
                 id=""
                 value={value}
                 ref={labelRef}

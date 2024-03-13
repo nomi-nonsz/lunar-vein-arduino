@@ -18,3 +18,11 @@ export interface ChannelPinState {
     green: PinState,
     blue: PinState
 }
+
+export interface PiezoMusic {
+    name: string,
+    pin: number | string;
+    notes: string[];
+    beats: number;
+    tempo: number;
+}

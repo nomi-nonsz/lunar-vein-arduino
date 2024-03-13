@@ -14,6 +14,7 @@ import ControlPhotoresistor from "../components/landing/ControlPhotoresistor";
 import ControlServo from "../components/landing/ControlServo";
 import Closing from "../components/landing/Closing";
 import Footer from "../components/Footer";
+import ControlPiezoMusicEditor from "../components/landing/ControlPiezoMusicEditor";
 
 function MainPage () {
     const led = useRef<HTMLDivElement | null>(null);
@@ -32,6 +33,7 @@ function MainPage () {
             <ControlLED refto={led} />
             <ControlRgbLed refto={rgbLed} />
             <ControlPiezo refto={piezo} />
+            <ControlPiezoMusicEditor />
             <ControlServo refto={servo} />
             <ControlPhotoresistor refto={photoresistor} />
             <Closing />

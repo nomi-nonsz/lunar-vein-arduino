@@ -10,13 +10,23 @@
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     /* Firefox */
     input[type=number] {
-    -moz-appearance: textfield;
+        -moz-appearance: textfield;
+    }
+
+    .v-scrollbar::-webkit-scrollbar {
+        width: 3px;
+    }
+    .v-scrollbar::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+    .v-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-primary cursor-pointer rounded-full;
     }
 }
 
