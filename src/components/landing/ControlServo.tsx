@@ -53,9 +53,9 @@ function Bar ({ index, servo }: { index: number, servo: DynamicPinState }) {
                         type="text"
                     />
                     {!isListen ? (
-                        <Button.Primary onClick={toggleListen} className="text-sm !py-0 h-11">Start Listening</Button.Primary>
+                        <Button.Primary onClick={toggleListen} className="text-sm !py-0 h-11">Start</Button.Primary>
                     ) : (
-                        <Button.Danger onClick={toggleListen} className="text-sm !py-0 h-11">Stop Listening</Button.Danger>
+                        <Button.Danger onClick={toggleListen} className="text-sm !py-0 h-11">Stop</Button.Danger>
                     )}
                 </div>
                 <div className="">{servo.state+"°"}</div>

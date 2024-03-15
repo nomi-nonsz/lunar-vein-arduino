@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FocusEvent, useState } from "react";
 
 type EvoDropDownItem = {
     name: string,
@@ -11,17 +11,18 @@ interface EvoDropDownProps {
     items: EvoDropDownItem[];
     initItem?: EvoDropDownItem;
     onValueChange?: (item: EvoDropDownItem) => void;
+    onBlur?: (e: FocusEvent) => void
 }
 
 interface MenuProps extends EvoDropDownProps {
     appear: boolean;
 }
 
-function Menu ({ className, items, initItem, appear, onValueChange }: MenuProps) {
+function Menu ({ className, items, initItem, appear, onValueChange, onBlur }: MenuProps) {
     const [currentItem, setItem] = useState<EvoDropDownItem>(initItem || items[0]);
 
     return (
-        <div className={`absolute p-2 flex flex-col w-full bg-black border mt-3 border-border rounded-lg ${appear ? "block" : "hidden"} ${className}`}>
+        <div className={`absolute p-2 flex flex-col w-full bg-black border mt-3 border-border rounded-lg ${appear ? "block" : "hidden"} ${className}`} onBlur={onBlur}>
             {items.map((item) => (
                 <button
                     className="py-2 px-3 flex justify-between items-center bg-transparent bg-opacity-100 hover:bg-indigo-300 hover:bg-opacity-20 rounded-md"

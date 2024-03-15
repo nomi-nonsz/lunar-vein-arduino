@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useState } from "react";
+import { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
 import { usePiezoMusic } from "../../hooks";
 import { PiezoMusic } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
@@ -28,23 +28,45 @@ function getNoteItems () {
 }
 
 function NoteItem ({note, index, parentIndex}: { note: string, index: number, parentIndex: number }) {
-    const { changeNote } = usePiezoMusic();
+    const { changeNote, removeNote } = usePiezoMusic();
 
     const [dropAppear, setApper] = useState<boolean>(false);
 
     const noteItems = getNoteItems();
     const toggleDropdown = () => { setApper(!dropAppear) };
+
     const handleChange = (item: { name: string, value: any }) => {
+        toggleDropdown();
         changeNote(parentIndex, index, item.value);
     }
 
+    const handleRemove = () => {
+        removeNote(parentIndex, index);
+    }
+
     return (
-        <button className="min-w-40 h-40 transition border border-border rounded-lg hover:bg-finn animate-size-fade-in" onClick={toggleDropdown}>
+        <button
+            className="min-w-40 h-40 transition border group border-border rounded-lg animate-size-fade-in relative"
+        >
+            <div className="absolute right-2 top-2 flex gap-1">
+                <button
+                    className="border w-8 h-8 border-border transition hover:bg-finn rounded-md opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                    onClick={toggleDropdown}
+                >
+                    <i className="bi bi-pencil text-xs"></i>
+                </button>
+                <button
+                    className="border w-8 h-8 border-border transition hover:bg-finn rounded-md opacity-0 group-hover:opacity-100 flex items-center justify-center"
+                    onClick={handleRemove}
+                >
+                    <i className="bi bi-dash"></i>
+                </button>
+            </div>
             <div className="text-xl">
                 {note}
             </div>
             <EvoDropDown.Menu
-                className="!w-32 top-1 h-56 z-30 overflow-y-scroll v-scrollbar"
+                className="!w-44 top-0 h-40 z-30 overflow-y-scroll v-scrollbar left-2"
                 appear={dropAppear}
                 items={noteItems}
                 onValueChange={handleChange}
@@ -68,7 +90,7 @@ function NotePlus ({ parentIndex }: { parentIndex: number }) {
         <button className="border border-border bg-secondary-solid rounded-lg min-w-40 h-40" onClick={toggleDropdown}>
             <i className="bi bi-plus text-2xl"></i>
             <EvoDropDown.Menu
-                className="!w-32 top-1 h-56 z-30 overflow-y-scroll v-scrollbar"
+                className="!w-32 top-0 h-56 z-30 overflow-y-scroll v-scrollbar"
                 appear={dropAppear}
                 items={noteItems}
                 onValueChange={handleAddNote}
@@ -162,7 +184,7 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
                 </div>
             </div>
             <div className="relative">
-                <div className="v-scrollbar flex flex-row flex-nowrap gap-4 overflow-x-scroll overflow-y-hidden relative">
+                <div className="v-scrollbar pb-4 flex flex-row flex-nowrap gap-4 overflow-x-scroll overflow-y-hidden relative">
                     {piezo.notes.map((note, i) => (
                         <NoteItem
                             note={note}

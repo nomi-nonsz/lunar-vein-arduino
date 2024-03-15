@@ -77,9 +77,9 @@ function Card ({ index, resistor }: { index: number, resistor: DynamicPinState }
                     onChange={(handleChange)}
                 />
                 {!isListen ? (
-                    <Button.Primary onClick={toggleListen} className="text-sm !p-0 h-11">Start Listening</Button.Primary>
+                    <Button.Primary onClick={toggleListen} className="text-sm !p-0 h-11">Start</Button.Primary>
                 ) : (
-                    <Button.Danger onClick={toggleListen} className="text-sm !p-0 h-11">Stop Listening</Button.Danger>
+                    <Button.Danger onClick={toggleListen} className="text-sm !p-0 h-11">Stop</Button.Danger>
                 )}
             </div>
         </div>
