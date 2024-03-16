@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Piezo } from "johnny-five";
-import { Pitch } from "../melodies";
+import { Pitch } from "../../melodies";
 
 export function piezoTone (req: Request, res: Response): Response {
     const pin: number = Number.parseInt(req.params.p);

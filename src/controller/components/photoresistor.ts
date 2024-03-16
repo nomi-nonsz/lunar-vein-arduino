@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { board } from "../setup";
-import { analogRead } from "../promises";
+import { board } from "../../setup";
+import { analogRead } from "../../promises";
 
 export async function readResistor (req: Request, res: Response): Promise<Response<string, any>> {
     const { p } = req.params;

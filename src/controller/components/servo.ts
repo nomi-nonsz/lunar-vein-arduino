@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { board } from "../setup";
+import { board } from "../../setup";
 
 export function rotateServo (req: Request, res: Response): Response<string, any> {
     const { p } = req.params;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { board, suBoard } from "../setup";
-import { sPinModes } from ".";
+import { board, suBoard } from "../../setup";
+import { sPinModes } from "..";
 import { Pin } from "johnny-five";
 
 export function readPin (req: Request, res: Response) {

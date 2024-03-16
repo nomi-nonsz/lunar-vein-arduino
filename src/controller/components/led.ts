@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { board } from "../setup";
-import { ChannelPins, digitalValue, voltage } from ".";
+import { board } from "../../setup";
+import { ChannelPins, digitalValue, voltage } from "..";
 import { Led } from "johnny-five";
 
 
