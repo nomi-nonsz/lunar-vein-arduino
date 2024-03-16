@@ -59,21 +59,30 @@ Arduino assembly guide also available in [johnny-five](https://github.com/rwaldr
     3. /dev/ttyACM0
     ```
 
-# API Documentation
+# REST API Documentation
 
 ## Table of contents
 - [Common HTTP Responses](#common-http-responses)
 - [JSON Response](#json-response)
 - [Example Request](#example-request)
+- [Digital](#digital)
+    - [Digital Read](#digital-read)
+    - [Digital Write](#digital-write)
+- [Analog](#analog)
+    - [Analog Read](#analog-read)
+    - [Analog Write](#analog-write)
 - [PIN](#pin)
-    - [Read pin mode](#read-pin-mode)
-    - [Set pin mode](#set-pin-mode)
+    - [Read PIN mode](#read-pin-mode)
+    - [Set PIN mode](#set-pin-mode)
 - [LED](#led)
     - [Read LED state](#read-led-state)
     - [Set LED state](#set-led-state)
 - [RGB LED](#rgb-led)
     - [Read RGB state](#read-rgb-state)
     - [Set RGB state](#set-rgb-state)
+- [Piezo](#piezo)
+    - [Piezo Tone](#piezo-tone)
+    - [Piezo Note](#piezo-note)
 
 ## Common HTTP Responses
 Some HTTP responses are sent with JSON, otherwise an HTML body will be sent which is the default express.js response 
@@ -113,9 +122,126 @@ async function turnOnLed() {
 }
 ```
 
+## Digital
+
+### Digital Read
+- **URL Endpoint**
+
+    /pin/:p/
+    
+- **URL Params**
+    
+    | Params | Mark | Type | Required | Description |
+    |--------|------|------|----------|-------------|
+    | pin | pin | `string` | true | Seleced pin |
+
+- **Method**
+
+    `GET`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_state": {
+            "13": "HIGH"
+        }
+    }
+    ```
+
+### Digital Write
+- **URL Endpoint**
+
+    /pin/:p/:m
+    
+- **Body**
+    
+    ```typescript
+    {
+        pin: number,
+        state: 'HIGH' | 'LOW' | 1 | 0 | string
+    }
+    ```
+
+- **Method**
+
+    `PATCH`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_state": {
+            "13": "HIGH"
+        }
+    }
+    ```
+
+## Analog
+
+### Analog Read
+- **URL Endpoint**
+
+    /pin/:p/
+    
+- **URL Params**
+    
+    | Params | Mark | Type | Required | Description |
+    |--------|------|------|----------|-------------|
+    | pin | pin | `string` | true | Seleced pin |
+
+- **Method**
+
+    `GET`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "analog_state": {
+            "A0": 1023
+        }
+    }
+    ```
+
+### Analog Write
+- **URL Endpoint**
+
+    /pin/:p/:m
+    
+- **Body**
+    
+    ```typescript
+    {
+        pin: string | number,
+        value: number
+    }
+    ```
+
+- **Method**
+
+    `PATCH`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_state": {
+            "13": 1023
+        }
+    }
+    ```
+
+
+
+
 ## PIN
 
-### Read pin mode
+### Read PIN mode
 - **URL Endpoint**
 
     /pin/:p/
@@ -145,7 +271,7 @@ async function turnOnLed() {
     }
     ```
 
-### Set pin mode
+### Set PIN mode
 - **URL Endpoint**
 
     /pin/:p/:m
@@ -245,7 +371,7 @@ async function turnOnLed() {
     
 - **Body**
 
-    ```javascript
+    ```typescript
     {
         r: number,
         g: number,
@@ -277,7 +403,7 @@ async function turnOnLed() {
     
 - **Body**
     
-    ```javascript
+    ```typescript
     {
         r: {
             pin: number,
@@ -311,4 +437,73 @@ async function turnOnLed() {
         "message": "Success changed pins 7, 6, 5 to state HIGH, HIGH, LOW"
     }
     ```
+
+
+
+
+
+
+## Piezo
+
+### Piezo Tone
+- **URL Endpoint**
+
+    /led/:p/:f
+    
+- **URL Params**
+    
+    | Params | Mark | Type | Required | Description |
+    |--------|------|------|----------|-------------|
+    | p | pin | `string` | true | Seleced pin |
+    | f | frequency | `number` | true | Frequency |
+
+- **Method**
+
+    `PATCH`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_tone": {
+            "6": 300
+        },
+        "message": "Piezo 6 tone 300"
+    }
+    ```
+
+### Piezo Note
+- **URL Endpoint**
+
+    /led/:p/:a
+    
+- **Body**
+    
+    ```typescript
+    {
+        pin: number,
+        note: string
+    }
+    ```
+
+- **Method**
+
+    `PATCH`
+
+- **Sample Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_tone": {
+            "6": 247
+        },
+        "pin_note": {
+            "6": "B3"
+        },
+        "message": "Piezo 6 tone note B3"
+    }
+    ```
+
 
