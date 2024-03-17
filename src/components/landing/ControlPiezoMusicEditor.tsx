@@ -7,6 +7,7 @@ import EvoDropDown from "../forms/EvoDropDown";
 import Button from "../forms/Button";
 import { pitch } from "../../data/melodies";
 import { PatchPiezoMusic } from "../../controllers/BoardController";
+import SearchItemModal from "../modals/SearchItemModal";
 
 function getNoteItems () {
     const pitches = Object.keys(pitch);
@@ -45,6 +46,7 @@ function NoteItem ({note, index, parentIndex}: { note: string, index: number, pa
     }
 
     return (
+        <>
         <button
             className="min-w-40 h-40 transition border group border-border rounded-lg animate-size-fade-in relative"
         >
@@ -65,13 +67,22 @@ function NoteItem ({note, index, parentIndex}: { note: string, index: number, pa
             <div className="text-xl">
                 {note}
             </div>
-            <EvoDropDown.Menu
+            {/* <EvoDropDown.Menu
                 className="!w-44 top-0 h-40 z-30 overflow-y-scroll v-scrollbar left-2"
                 appear={dropAppear}
                 items={noteItems}
                 onValueChange={handleChange}
-            />
+            /> */}
         </button>
+
+        {dropAppear == true && <SearchItemModal
+            name="Piezo"
+            items={noteItems}
+            initItem={{ name: note.replace("S", "#"), value: note.replace("S", "#") }}
+            onValueChange={handleChange}
+            onClose={toggleDropdown}
+        />}
+        </>
     )
 }
 
@@ -84,23 +95,32 @@ function NotePlus ({ parentIndex }: { parentIndex: number }) {
 
     const handleAddNote = (item: { name: string, value: any }) => {
         addNote(parentIndex, item.value);
+        setApper(false);
     }
 
     return (
-        <button className="border border-border bg-secondary-solid rounded-lg min-w-40 h-40" onClick={toggleDropdown}>
-            <i className="bi bi-plus text-2xl"></i>
-            <EvoDropDown.Menu
-                className="!w-32 top-0 h-56 z-30 overflow-y-scroll v-scrollbar"
-                appear={dropAppear}
+        <>
+            <button className="border border-border bg-secondary-solid rounded-lg min-w-40 h-40" onClick={toggleDropdown}>
+                <i className="bi bi-plus text-2xl"></i>
+                {/* <EvoDropDown.Menu
+                    className="!w-32 top-0 h-56 z-30 overflow-y-scroll v-scrollbar"
+                    appear={dropAppear}
+                    items={noteItems}
+                    onValueChange={handleAddNote}
+                /> */}
+            </button>
+            {dropAppear == true && <SearchItemModal
+                name="Piezo"
                 items={noteItems}
                 onValueChange={handleAddNote}
-            />
-        </button>
+                onClose={toggleDropdown}
+            />}
+        </>
     )
 }
 
 function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
-    const { setName, setPin, setBeat, setTempo } = usePiezoMusic();
+    const { setName, setPin, setBeat, setTempo, removePiezo } = usePiezoMusic();
 
     const beatsItem = [
         {
@@ -123,6 +143,9 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
 
     const initBeatItem = beatsItem.find((item) => item.value == piezo.beats);
 
+    const exportJson = () => {
+    }
+
     const handle = {
         changeName: (e: ChangeEvent<HTMLInputElement | null>) => {
             setName(index, e.target.value);
@@ -137,13 +160,20 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
             const tempo = Number.parseInt(e.target.value);
             setTempo(index, tempo);
         },
+        remove: () => {
+            removePiezo(index);
+        },
         play: () => {
             PatchPiezoMusic(piezo);
-        }
+        },
+        export: exportJson
     }
 
     return (
-        <div className="flex flex-col gap-5 bg-secondary border border-border rounded-lg p-5 animate-size-fade-in">
+        <div className="flex flex-col gap-5 bg-secondary border border-border rounded-lg p-5 animate-size-fade-in relative">
+            <button className="ms-auto absolute -right-24 top-1/2 -translate-y-1/2 bg-finn hover:bg-secondary transition border border-border rounded-lg px-5" onClick={handle.remove}>
+                <i className="bi bi-dash text-3xl"></i>
+            </button>
             <div className="flex flex-row justify-between">
                 <div className="flex flex-row gap-3">
                     <Input
@@ -174,7 +204,7 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
                     />
                 </div>
                 <div className="flex flex-row gap-3">
-                    <Button.Secondary className="!py-0 !px-6 flex items-center gap-3">
+                    <Button.Secondary className="!py-0 !px-6 flex items-center gap-3" onClick={exportJson}>
                         <div className="text-sm">Export</div>
                         <i className="bi bi-upload text-sm"></i>
                     </Button.Secondary>
