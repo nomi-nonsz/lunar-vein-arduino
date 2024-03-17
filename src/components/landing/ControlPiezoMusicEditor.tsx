@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { usePiezoMusic } from "../../hooks";
 import { PiezoMusic } from "../../types/board";
 import EvoInput from "../forms/EvoInput";
@@ -48,7 +48,7 @@ function NoteItem ({note, index, parentIndex}: { note: string, index: number, pa
     return (
         <>
         <button
-            className="min-w-40 h-40 transition border group border-border rounded-lg animate-size-fade-in relative"
+            className="min-w-32 h-32 transition border group border-border rounded-lg animate-size-fade-in relative"
         >
             <div className="absolute right-2 top-2 flex gap-1">
                 <button
@@ -76,7 +76,7 @@ function NoteItem ({note, index, parentIndex}: { note: string, index: number, pa
         </button>
 
         {dropAppear == true && <SearchItemModal
-            name="Piezo"
+            name="Edit Piezo Note"
             items={noteItems}
             initItem={{ name: note.replace("S", "#"), value: note.replace("S", "#") }}
             onValueChange={handleChange}
@@ -100,7 +100,7 @@ function NotePlus ({ parentIndex }: { parentIndex: number }) {
 
     return (
         <>
-            <button className="border border-border bg-secondary-solid rounded-lg min-w-40 h-40" onClick={toggleDropdown}>
+            <button className="border border-border bg-secondary-solid rounded-lg min-w-32 h-32" onClick={toggleDropdown}>
                 <i className="bi bi-plus text-2xl"></i>
                 {/* <EvoDropDown.Menu
                     className="!w-32 top-0 h-56 z-30 overflow-y-scroll v-scrollbar"
@@ -110,7 +110,7 @@ function NotePlus ({ parentIndex }: { parentIndex: number }) {
                 /> */}
             </button>
             {dropAppear == true && <SearchItemModal
-                name="Piezo"
+                name="Add Piezo Note"
                 items={noteItems}
                 onValueChange={handleAddNote}
                 onClose={toggleDropdown}
@@ -144,6 +144,25 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
     const initBeatItem = beatsItem.find((item) => item.value == piezo.beats);
 
     const exportJson = () => {
+        const filename = "piezo-music_" + piezo.name
+            .toLocaleLowerCase()
+            .split("")
+            .map(char => char == " " ? "-" : char)
+            .join("") + ".json"
+
+        const json = JSON.stringify(piezo, null, 4);
+        const blob = new Blob([json], {
+            type: "application/json; charset=utf-8"
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     const handle = {
@@ -230,36 +249,61 @@ function PiezoEditor ({ piezo, index }: { piezo: PiezoMusic, index: number }) {
     )
 }
 
-function BarPlus ({ onClick }: { onClick?: MouseEventHandler<HTMLButtonElement> }) {
-    return (
-        <button
-            className="bg-finn h-36 hover:bg-secondary transition col-span-2 rounded-lg border border-border flex items-center justify-center"
-            onClick={onClick}
-        >
-            <i className="bi bi-plus text-6xl text-border"></i>
-        </button>
-    )
-}
-
-function ControlPiezoMusicEditor () {
-    const { piezeNotes, addPiezo } = usePiezoMusic();
+function PiezoBarPlus () {
+    const { addPiezo } = usePiezoMusic();
 
     const handleAdd = (): void => {
-        let anopin = 13;
-        for (let i = 0; i < piezeNotes.length; i++) {
-            if (piezeNotes.filter(piezo => piezo.pin == anopin).length > 0) {
-                anopin--;
-            }
-            else break;
-        }
         addPiezo({
-            name: "test",
-            pin: anopin,
+            name: "",
+            pin: 11,
             notes: [],
             beats: 1/4,
             tempo: 100
         });
     }
+
+    const handleImport = (e: ChangeEvent<HTMLInputElement | null>): void => {
+        const file: File | null = e.target.files ? e.target.files[0] : null;
+        
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event: ProgressEvent<FileReader>) => {
+            const result = event.target ? event.target.result : null;
+            
+            if (result && typeof result == "string") {
+                const data: PiezoMusic = JSON.parse(result);
+                const isValidFormat: boolean = data.name != null && data.pin != null && data.notes != null && data.beats != null && data.tempo != null;
+
+                if (isValidFormat) addPiezo(data);
+            }
+        }
+        reader.readAsText(file);
+    }
+
+    return (
+        <div className="flex flex-row gap-5">
+            <button
+                className="bg-finn h-36 flex-1 hover:bg-secondary transition col-span-2 rounded-lg border text-border border-border hover:border-slate-400 hover:text-slate-400 flex items-center justify-center"
+                onClick={handleAdd}
+            >
+                <i className="bi bi-plus text-5xl"></i>
+                <div className="font-roboto-mono text-lg">Add New</div>
+            </button>
+            <label
+                htmlFor="file"
+                className="bg-finn h-36 flex-1 hover:bg-secondary transition col-span-2 rounded-lg border text-border border-border hover:border-slate-400 hover:text-slate-400 flex items-center justify-center cursor-pointer"
+            >
+                <input type="file" id="file" className="hidden" onChange={handleImport} />
+                <i className="bi bi-download text-3xl me-3"></i>
+                <div className="font-roboto-mono text-lg">Import</div>
+            </label>
+        </div>
+    )
+}
+
+function ControlPiezoMusicEditor () {
+    const { piezeNotes } = usePiezoMusic();
 
     return (
         <div className="container grid items-center relative">
@@ -278,7 +322,7 @@ function ControlPiezoMusicEditor () {
                             key={i}
                         />
                     ))}
-                    <BarPlus onClick={handleAdd} />
+                    <PiezoBarPlus />
                 </div>
             </div>
         </div>
