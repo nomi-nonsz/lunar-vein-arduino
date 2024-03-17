@@ -72,8 +72,8 @@ Arduino assembly guide also available in [johnny-five](https://github.com/rwaldr
     - [Analog Read](#analog-read)
     - [Analog Write](#analog-write)
 - [PIN](#pin)
-    - [Read PIN mode](#read-pin-mode)
-    - [Set PIN mode](#set-pin-mode)
+    - [Read PIN Mode](#read-pin-mode)
+    - [Set PIN Mode](#set-pin-mode)
 - [LED](#led)
     - [Read LED state](#read-led-state)
     - [Set LED state](#set-led-state)
@@ -83,6 +83,7 @@ Arduino assembly guide also available in [johnny-five](https://github.com/rwaldr
 - [Piezo](#piezo)
     - [Piezo Tone](#piezo-tone)
     - [Piezo Note](#piezo-note)
+    - [Piezo Play Music](#piezo-play-music)
 
 ## Common HTTP Responses
 Some HTTP responses are sent with JSON, otherwise an HTML body will be sent which is the default express.js response 
@@ -112,11 +113,19 @@ Some HTTP responses are sent with JSON, otherwise an HTML body will be sent whic
 | message | Descriptive message of the changed state |
 
 ## Example Request
-This is an example of javascript code sending a request to turn on the LED light, [See LED API](#set-led-state)
+This is an example of sending a request to turn on the LED light, [See LED API](#set-led-state)
+
+**Using curl**
+
+```bash
+curl -X PATCH http://localhost:3000/api-arduino/led/13/on
+```
+
+**Using fetch async/await javascript**
 
 ```javascript
 async function turnOnLed() {
-    const res = await fetch("http://localhost:3000/led/13/on"); // Set LED to HIGH
+    const res = await fetch("http://localhost:3000/api-arduino/led/13/on", { method: 'PATCH' }); // Set LED to HIGH
     const data = await res.json();
     console.log(data); // { status: 200, pin_state: { 13: high }, message: "Pin 13 Set to HIGH" }
 }
@@ -127,7 +136,7 @@ async function turnOnLed() {
 ### Digital Read
 - **URL Endpoint**
 
-    /pin/:p/
+    `/api-arduino/digital/:pin`
     
 - **URL Params**
     
@@ -139,7 +148,15 @@ async function turnOnLed() {
 
     `GET`
 
-- **Sample Response**
+- **Example Request**
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/digital/13")
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -153,7 +170,7 @@ async function turnOnLed() {
 ### Digital Write
 - **URL Endpoint**
 
-    /pin/:p/:m
+    `/api-arduino/digital`
     
 - **Body**
     
@@ -168,7 +185,30 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    var data = {
+        pin: 13,
+        state: 'LOW'
+    }
+
+    var options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/digital", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -184,7 +224,7 @@ async function turnOnLed() {
 ### Analog Read
 - **URL Endpoint**
 
-    /pin/:p/
+    `/api-arduino/analog/:p`
     
 - **URL Params**
     
@@ -196,7 +236,15 @@ async function turnOnLed() {
 
     `GET`
 
-- **Sample Response**
+- **Example Request**
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/analog/A0")
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -210,7 +258,7 @@ async function turnOnLed() {
 ### Analog Write
 - **URL Endpoint**
 
-    /pin/:p/:m
+    `/api-arduino/analog`
     
 - **Body**
     
@@ -225,7 +273,30 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    var data = {
+        pin: 'A0',
+        value: 1023
+    }
+
+    var options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/analog", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -241,10 +312,10 @@ async function turnOnLed() {
 
 ## PIN
 
-### Read PIN mode
+### Read PIN Mode
 - **URL Endpoint**
 
-    /pin/:p/
+    `/api-arduino/pin/:p/`
     
 - **URL Params**
     
@@ -256,7 +327,16 @@ async function turnOnLed() {
 
     `GET`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/pin/13")
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -271,10 +351,10 @@ async function turnOnLed() {
     }
     ```
 
-### Set PIN mode
+### Set PIN Mode
 - **URL Endpoint**
 
-    /pin/:p/:m
+    `/api-arduino/pin/:p/:m`
     
 - **URL Params**
     
@@ -287,7 +367,16 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/pin/13/output", { method: 'PATCH' })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -308,7 +397,7 @@ async function turnOnLed() {
 ### Read LED state
 - **URL Endpoint**
 
-    /led/:p/
+    `/api-arduino/led/:p/`
     
 - **URL Params**
     
@@ -320,7 +409,16 @@ async function turnOnLed() {
 
     `GET`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/led/13")
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -335,7 +433,7 @@ async function turnOnLed() {
 ### Set LED state
 - **URL Endpoint**
 
-    /led/:p/:a
+    `/api-arduino/led/:p/:a`
     
 - **URL Params**
     
@@ -348,7 +446,16 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/led/13/output", { method: 'PATCH' })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -367,7 +474,7 @@ async function turnOnLed() {
 ### Read RGB state
 - **URL Endpoint**
 
-    /rgb-led
+    `/api-arduino/rgb-led`
     
 - **Body**
 
@@ -383,7 +490,31 @@ async function turnOnLed() {
 
     `POST`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    var data = {
+        r: 7,
+        g: 6,
+        b: 5
+    }
+
+    var options = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/rgb-led", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -399,7 +530,7 @@ async function turnOnLed() {
 ### Set RGB state
 - **URL Endpoint**
 
-    /rgb-led
+    `/api-arduino/rgb-led`
     
 - **Body**
     
@@ -424,7 +555,40 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    var data = {
+        r: {
+            pin: 7,
+            value: true
+        },
+        g: {
+            pin: 6,
+            value: true
+        },
+        b: {
+            pin: 5,
+            value: false
+        }
+    }
+
+    var options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/rgb-led", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -448,7 +612,7 @@ async function turnOnLed() {
 ### Piezo Tone
 - **URL Endpoint**
 
-    /led/:p/:f
+    `/api-arduino/piezo/:p/:f`
     
 - **URL Params**
     
@@ -461,7 +625,16 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    fetch("http://localhost:3000/api-arduino/piezo/6/300", { method: 'PATCH' })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -476,7 +649,7 @@ async function turnOnLed() {
 ### Piezo Note
 - **URL Endpoint**
 
-    /led/:p/:a
+    `/api-arduino/piezo/note`
     
 - **Body**
     
@@ -491,7 +664,30 @@ async function turnOnLed() {
 
     `PATCH`
 
-- **Sample Response**
+- **Example Request**
+
+    ```javascript
+    var data = {
+        pin: 6,
+        note: "B3"
+    }
+
+    var options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/piezo/note", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
 
     ```json
     {
@@ -507,3 +703,70 @@ async function turnOnLed() {
     ```
 
 
+### Piezo Play Music
+- **URL Endpoint**
+
+    `/api-arduino/piezo/music`
+    
+- **Body**
+    
+    ```typescript
+    {
+        pin: number,
+        notes: string[],
+        beats: number,
+        tempo: number
+    }
+    ```
+
+    Example
+
+    ```javascript
+    {
+        pin: 6,
+        notes: ["F4", "G4", "F4", "G4"],
+        beats: 1/4,
+        tempo: 100
+    }
+    ```
+
+- **Method**
+
+    `PATCH`
+
+- **Example Request**
+
+    ```javascript
+    var data = {
+        pin: 6,
+        notes: ["E4", "E4", "F4", "G4", "G4", "F4", "E4", "D4", "C4", "C4", "D4", "E4", "D4", "-", "C4", "C4"], // ode to joy notes
+        beats: 1/2,
+        tempo: 100
+    }
+
+    var options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    }
+
+    fetch("http://localhost:3000/api-arduino/piezo/music", options)
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.error('error', err));
+    ```
+
+- **Example Response**
+
+    ```json
+    {
+        "status": 200,
+        "pin_notes": {
+            "6": [ "E4", "E4", "F4", "G4", "G4", "F4", "E4", "D4", "C4", "C4", "D4", "E4", "D4", "-", "C4", "C4" ]
+        },
+        "message": "Piezo 6 play notes E4, E4, F4, G4..."
+    }
+    ```
