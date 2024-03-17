@@ -3,7 +3,7 @@ import { board } from "../../setup";
 import * as Promises from "../../promises";
 
 interface AnalogState {
-    pin: number | string,
+    pin: string,
     value: number
 }
 
@@ -11,7 +11,7 @@ export function analogWrite (req: Request, res: Response): Response<string | any
     const { pin, value }: AnalogState = req.body;
 
     try {
-        board.analogWrite(pin, value);
+        board.analogWrite(pin[0] == "A" ? pin.slice(1, pin.length) : pin, value);
     
         return res.status(200).json({
             status: 200,

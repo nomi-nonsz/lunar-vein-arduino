@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { Router } from "express";
 
-import { readPin, setPin } from "../controller/basic/pin";
+import { readPin, readPins, setPin, setPins } from "../controller/basic/pin";
 import { digitalRead, digitalWrite } from "../controller/basic/digital";
 import { analogRead, analogWrite } from "../controller/basic/analog";
 
@@ -20,7 +20,9 @@ router.get('/hello', (req, res: Response): Response<string> => {
 
 // PinMode
 router.get('/pin/:p', readPin);
+router.get('/pins', readPins);
 router.patch('/pin/:p/:m', setPin);
+router.patch('/pins', setPins);
 
 // Digital read/write
 router.get('/digital/:pin', digitalRead);
@@ -42,8 +44,8 @@ router.patch('/rgb-led/', writeRgbLed);
 // Piezo
 router.patch('/piezo/:p/:f', isPinNumeric, piezoTone);
 router.patch('/piezo/note', piezoNote);
-router.patch('/piezo/music/', piezoPlayNotes);
-router.patch('/piezo/stop/', piezoNoTone);
+router.patch('/piezo/music', piezoPlayNotes);
+router.patch('/piezo/stop', piezoNoTone);
 
 // for real-time communication is deprecated and not recommended
 // use other protocol like websocket instead, we're using socket.io
