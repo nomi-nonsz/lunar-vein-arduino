@@ -49,6 +49,12 @@ server.listen(port, () => {
         suBoard.connected = true;
     })
 
+    board.on('error', (err) => {
+        console.error(chalk.red("\nError while connecting to Board"));
+        console.error(chalk.red(err.message));
+        console.log("Enter 'rs' to try again");
+    })
+
     board.on('exit', () => {
         console.log("Bye bye");
     })
