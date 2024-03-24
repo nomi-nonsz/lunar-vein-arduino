@@ -1,6 +1,6 @@
 {
   "name": "lunar-vein-arduino",
-  "version": "1.0.0",
+  "version": "0.0.6",
   "description": "A test to arduino",
   "main": "index.ts",
   "author": "Norman Andrians",
@@ -24,6 +24,7 @@
     "ip": "^2.0.1",
     "johnny-five": "^2.1.0",
     "nodemon": "^3.1.0",
+    "pkg": "^5.8.1",
     "serialport": "^12.0.0",
     "socket.io": "^4.7.4"
   },
