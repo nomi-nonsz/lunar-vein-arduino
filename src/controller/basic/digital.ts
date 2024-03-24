@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { board } from "../../setup";
+import { suBoard } from "../../setup";
 
 interface DigitalState {
     pin: number | string,
@@ -7,6 +7,7 @@ interface DigitalState {
 }
 
 export function digitalWrite (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const { pin, state }: DigitalState = req.body;
     let value: number;
 
@@ -38,6 +39,7 @@ export function digitalWrite (req: Request, res: Response): Response<string | an
 }
 
 export function digitalRead (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     try {
         const { pin } = req.params;
         const value = board.pins[pin].value == 1 ? 'HIGH' : 'LOW';

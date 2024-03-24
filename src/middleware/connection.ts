@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { board, suBoard } from "../setup";
+import { suBoard } from "../setup";
+
+const { board } = suBoard;
 
 export function isBoardConnected (req: Request, res: Response, next: NextFunction) {
     if (suBoard.connected) {

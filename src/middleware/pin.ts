@@ -24,7 +24,7 @@ export function isPinBeingUsed (req: Request, res: Response, next: NextFunction)
         });
     }
 
-    if (suBoard.PINS.pwm.indexOf(pin) != -1) {
+    if (suBoard.PINS.digital.indexOf(pin) != -1) {
         return res.status(400).json({
             status: 400,
             message: `Pin ${pin}, is used`

@@ -1,22 +1,25 @@
+import { Board } from "johnny-five";
+
 export interface SupportBoard {
     port: string | null,
     connected: boolean,
     PINS: {
-        pwm: number[],
+        digital: number[],
         analog: number[],
     }
     sort: () => void
 }
 
 export class SuBoard implements SupportBoard {
+    public board: Board | null;
     public port = null;
     public connected = false;
     public PINS = {
-        pwm: [],
+        digital: [],
         analog: []
     };
     public sort() {
-        this.PINS.pwm = this.PINS.pwm.sort((a, b) => b - a);
+        this.PINS.digital = this.PINS.digital.sort((a, b) => b - a);
         this.PINS.analog = this.PINS.analog.sort((a, b) => b - a);
     }
 }

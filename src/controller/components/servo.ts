@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { board } from "../../setup";
+import { suBoard } from "../../setup";
 
 export function rotateServo (req: Request, res: Response): Response<string, any> {
+    const { board } = suBoard;
     const { p } = req.params;
     const pin: string = req.params.p.startsWith("A") ? req.params.p.slice(0, p.length) : req.params.p;
     const angle: number = Number.parseInt(req.params.ang);

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { board } from "../../setup";
-import { ChannelPins, digitalValue, voltage } from "..";
-import { Led } from "johnny-five";
-
+import { suBoard } from "../../setup";
+import { ChannelPins, voltage } from "..";
+import { Led } from "johnny-five";  
 
 export function readLed (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     try {
         const { p } = req.params;
         const pin: number = Number.parseInt(p);
@@ -29,6 +29,7 @@ export function readLed (req: Request, res: Response): Response<string | any> {
 }
 
 export function writeLed (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const { p, a } = req.params;
     const act: string = a.toLocaleLowerCase();
     const pin: number = Number.parseInt(p);

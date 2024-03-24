@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { board, suBoard } from "../../setup";
+import { suBoard } from "../../setup";
 import { sPinModes } from "..";
 import { Pin } from "johnny-five";
 
+
 export function readPin (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const pin: string = req.params.p;
 
     const { mode } = board.pins[pin];
@@ -21,6 +23,7 @@ export function readPin (req: Request, res: Response): Response<string | any> {
 }
 
 export function readPins (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const pins: string[] = req.body.p;
     const pinModes = [];
 
@@ -39,12 +42,13 @@ export function readPins (req: Request, res: Response): Response<string | any> {
 }
 
 export function setPin (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const pin: string = req.params.p;
     const mode: sPinModes | string = req.params.m.toUpperCase();
 
     board.pinMode(pin, Pin[mode]);
 
-    suBoard.PINS.pwm.push(pin);
+    suBoard.PINS.digital.push(pin);
     suBoard.sort();
 
     return res.status(200).json({
@@ -60,6 +64,7 @@ export function setPin (req: Request, res: Response): Response<string | any> {
 }
 
 export function setPins (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     type PinModes = {
         pin: string,
         mode: sPinModes | string
@@ -71,7 +76,7 @@ export function setPins (req: Request, res: Response): Response<string | any> {
         const { pin, mode } = p;
         board.pinMode(pin, Pin[mode]);
 
-        suBoard.PINS.pwm.push(pin);
+        suBoard.PINS.digital.push(pin);
         suBoard.sort();
     });
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { board } from "../../setup";
+import { suBoard } from "../../setup";
 import * as Promises from "../../promises";
+
 
 interface AnalogState {
     pin: string,
@@ -8,6 +9,7 @@ interface AnalogState {
 }
 
 export function analogWrite (req: Request, res: Response): Response<string | any> {
+    const { board } = suBoard;
     const { pin, value }: AnalogState = req.body;
 
     try {
@@ -27,6 +29,7 @@ export function analogWrite (req: Request, res: Response): Response<string | any
 }
 
 export async function analogRead (req: Request, res: Response) {
+    const { board } = suBoard;
     let { pin } = req.params;
     pin = pin[0] == "A" ? pin.slice(1, pin.length) : pin;
 

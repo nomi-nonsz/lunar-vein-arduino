@@ -1,6 +1,8 @@
 import { Socket } from "socket.io";
 import { Pin, Sensor } from "johnny-five";
-import { board } from "../setup";
+import { suBoard } from "../setup";
+
+const { board } = suBoard;
 
 export default (socket: Socket) => {
     console.log(`${socket.id} | ${socket.client.request.headers.host} | Joined`);

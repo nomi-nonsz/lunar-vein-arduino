@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import { board } from "../../setup";
+import { suBoard } from "../../setup";
 import { analogRead } from "../../promises";
 
+
 export async function readResistor (req: Request, res: Response): Promise<Response<string, any>> {
+    const { board } = suBoard;
     const { p } = req.params;
     const pin: string = req.params.p.startsWith("A") ? req.params.p.slice(0, p.length) : req.params.p;
 
